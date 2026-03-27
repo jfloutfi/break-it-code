@@ -36,15 +36,17 @@ The player lands on the Setup Screen and configures their game before starting.
 |---|---|---|
 | Number of slots | 3, 4, 5, or 6 | 4 |
 | Number of colors | 4, 5, 6, 7, or 8 | 6 |
-| Allow duplicate colors | Yes / No | Yes |
+| Allow duplicate colors | Yes / No | No |
 | Feedback mode | Standard (positional) / Limited (count only) | Standard |
-| Time attack | Off / 15s / 30s / 60s per guess | Off |
+| Time attack | Off / 15s / 30s / 45s per guess | Off |
 
 **Auto-calculated attempts:** The game calculates a fair number of attempts based on settings. The formula should make the game winnable but not trivial:
 
 - Base: `Math.ceil(slots * 1.5 + 2)`
 - +2 if duplicates are allowed
 - +2 if feedback mode is limited
+- +1 for 45s time attack · +2 for 30s · +3 for 15s (faster = harder = more attempts)
+- +1 for 6 colors · +2 for 7–8 colors (more colors = larger search space)
 - Cap between 6 and 15
 
 **Setup screen elements:**
@@ -66,8 +68,9 @@ The player makes guesses and receives feedback.
 - A color palette at the bottom lets the player pick colors to place in slots
 
 **Interaction:**
-- Click a color from the palette → click an empty slot to place it
-- Or: click a filled slot to remove a color and replace it
+- Click a color from the palette → click any slot to place or replace it
+- Click a filled slot with no color selected to clear it
+- Click an empty slot with no color selected → a "PICK A COLOR FIRST!" hint flashes
 - A SUBMIT button activates only when all slots are filled
 - A CLEAR button wipes all slots in the active row instantly
 - After submission, feedback is shown for that row and the next row activates
@@ -83,9 +86,10 @@ The player makes guesses and receives feedback.
 - No positional information
 
 **Time attack (if enabled):**
-- Countdown timer visible per guess row
-- If time runs out, the row is auto-submitted (if full) or skipped (if not full), costing the attempt
-- Timer resets on each new row
+- Countdown bottle timer visible per guess (vertical on desktop, horizontal pill on mobile)
+- If time runs out and the row is full, it auto-submits
+- If time runs out and the row is incomplete, the attempt is burned — no feedback, red ! shown
+- Timer resets (refills) on each new row
 
 **UI elements:**
 - Attempt counter: "Attempt 3 of 10"
@@ -101,13 +105,13 @@ Shown on win or loss.
 **Win state:**
 - "YOU CRACKED IT!" message
 - Show the secret code (revealed)
-- Show final score with breakdown: base score, efficiency multiplier, difficulty multiplier, time bonus
+- Show final score with full breakdown: base, efficiency, difficulty (with modifier hints), time bonus, total
 - Play Again button (returns to Setup Screen)
 
 **Lose state:**
-- "CODE UNBROKEN" message
+- "CODE UNBROKEN" or "YOU GAVE UP" message
 - Reveal the secret code
-- Show what score would have been
+- Score shown as 0 if player gave up; otherwise shows what score would have been
 - Play Again button
 
 ---
@@ -120,8 +124,8 @@ All scoring is calculated client-side with no backend needed.
 |---|---|
 | Base score | `1000` |
 | Efficiency multiplier | `(maxAttempts - attemptsUsed + 1) / maxAttempts` |
-| Difficulty multiplier | `(slots × colors) / 24` |
-| Time bonus | `+50 per attempt where time > 50% remained` |
+| Difficulty multiplier | `(slots × colors) / 24 × 1.25 if duplicates × 1.25 if limited feedback` |
+| Time bonus | `+50 per attempt where >50% time remained · +25 where >25% remained · else 0` |
 | Final score | `Base × Efficiency × Difficulty + TimeBonus` (rounded to nearest integer) |
 
 ---

@@ -3,7 +3,7 @@
  * Shows all attempt rows, the color palette, and controls.
  */
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { COLORS } from '../utils/constants.js'
 import { useTimer } from '../hooks/useTimer.js'
 import './GameBoard.css'
@@ -26,6 +26,15 @@ export default function GameBoard({
   const palette = COLORS.slice(0, settings.colors)
   const timeLimit = settings.timeAttack || 0
 
+  // Brief "pick a color first" hint when clicking an empty slot with no color selected
+  const [showPickHint, setShowPickHint] = useState(false)
+  const pickHintTimer = useRef(null)
+  const flashPickHint = useCallback(() => {
+    setShowPickHint(true)
+    clearTimeout(pickHintTimer.current)
+    pickHintTimer.current = setTimeout(() => setShowPickHint(false), 1800)
+  }, [])
+
   // Capture latest canSubmit in a ref so the timer callback always sees current value
   const canSubmitRef = useRef(canSubmit)
   useEffect(() => { canSubmitRef.current = canSubmit }, [canSubmit])
@@ -44,7 +53,7 @@ export default function GameBoard({
     }, 1000)
   }, [onSubmit])
 
-  const { timeRemaining } = useTimer({
+  const { timeRemaining, refilling } = useTimer({
     timeLimit,
     resetKey: attemptNumber,
     onExpire: handleTimerExpire,
@@ -86,11 +95,13 @@ export default function GameBoard({
         {/* ── Left Panel: Palette + Submit (sticky) ── */}
         <div className="board__side">
 
-          {/* ── Mobile-only horizontal timer bar (shown above palette on mobile) ── */}
+          {/* ── Mobile-only bottle timer (shown above palette on mobile) ── */}
           {timeLimit > 0 && (
-            <div className={`board__timer-mobile ${timerDanger ? 'board__timer-mobile--danger' : ''}`}>
-              <div className="board__timer-mobile-fill" style={{ width: `${timePct}%` }} />
-              <span className="board__timer-mobile-num">{timeRemaining}s</span>
+            <div className={`board__bottle-mobile ${timerDanger ? 'board__bottle-mobile--danger' : ''}`}>
+              <div className="board__bottle-mobile-track">
+                <div className={`board__bottle-mobile-fill ${refilling ? 'board__bottle-mobile-fill--refilling' : ''}`} style={{ width: `${timePct}%` }} />
+              </div>
+              <span className="board__bottle-mobile-num">{timeRemaining}s</span>
             </div>
           )}
           <p className="board__side-label">COLORS</p>
@@ -110,11 +121,13 @@ export default function GameBoard({
               />
             ))}
           </div>
-          {selectedColor !== null && (
-            <p className="board__selected-hint">
-              {COLORS[selectedColor].name.toUpperCase()}
-            </p>
-          )}
+          <p className={`board__selected-hint${showPickHint && selectedColor === null ? ' board__selected-hint--warn' : ''}`}>
+            {selectedColor !== null
+              ? COLORS[selectedColor].name.toUpperCase()
+              : showPickHint
+              ? 'PICK A COLOR FIRST!'
+              : '\u00A0'}
+          </p>
           {/* Clear all slots in the active row */}
           <button className="board__clear-btn" onClick={onClearGuess}>
             CLEAR
@@ -164,7 +177,12 @@ export default function GameBoard({
                             key={slotIdx}
                             className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
                             style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
-                            onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
+                            onClick={() => {
+                              if (!isActive) return
+                              if (selectedColor !== null) { onPlaceColor(slotIdx) }      // place/replace
+                              else if (color) { onClearSlot(slotIdx) }                  // no color → clear
+                              else { flashPickHint() }                                   // empty + no color → hint
+                            }}
                             disabled={!isActive}
                             aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
                           />
@@ -193,7 +211,7 @@ export default function GameBoard({
             <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
               <div className="board__bottle-track">
                 <div
-                  className="board__bottle-fill"
+                  className={`board__bottle-fill ${refilling ? 'board__bottle-fill--refilling' : ''}`}
                   style={{ height: `${timePct}%` }}
                 />
               </div>

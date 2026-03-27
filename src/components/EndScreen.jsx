@@ -77,6 +77,8 @@ export default function EndScreen({ result, gaveUp, code, finalScore, attemptNum
                 </div>
                 <div className="end__score-hint">
                   {finalScore.slots} slots × {finalScore.numColors} colors ÷ 24
+                  {finalScore.duplicates ? ' × 1.25 (dupes)' : ''}
+                  {finalScore.feedbackMode === 'limited' ? ' × 1.25 (limited)' : ''}
                 </div>
 
                 <div className="end__score-divider" />

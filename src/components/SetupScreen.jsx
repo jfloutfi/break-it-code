@@ -124,7 +124,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
           onClick={() => setHtpOpen((o) => !o)}
           aria-expanded={htpOpen}
         >
-          HOW TO PLAY <span className="setup__htp-arrow">{htpOpen ? '▴' : '▾'}</span>
+          HOW TO PLAY... <span className="setup__htp-arrow">{htpOpen ? '▴' : '▾'}</span>
         </button>
 
         {htpOpen && (

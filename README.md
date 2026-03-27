@@ -4,6 +4,8 @@ A customizable Mastermind-inspired logic puzzle game. Crack the hidden color seq
 
 **Stack:** React + Vite · Plain CSS · No external game libraries
 
+**Live:** [break-it-code.vercel.app](https://break-it-code.vercel.app/)
+
 ---
 
 ## Play

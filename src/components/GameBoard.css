@@ -169,6 +169,11 @@
   box-shadow: 0 0 10px var(--accent-pink);
 }
 
+/* Refill animates 2× faster than the 1s countdown drain */
+.board__bottle-fill--refilling {
+  transition: height 0.5s linear;
+}
+
 .board__bottle-num {
   font-family: var(--font-pixel);
   font-size: 0.5rem;
@@ -320,6 +325,7 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
+  width: 140px; /* fixed width prevents layout shift when hint text changes */
   position: sticky;
   top: 1rem;
   align-self: flex-start;
@@ -366,6 +372,15 @@
   text-shadow: 0 0 6px var(--accent-cyan);
   text-align: center;
   max-width: 130px;
+  animation: peg-reveal 0.15s ease both;
+}
+
+.board__selected-hint--warn {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  line-height: 1.8;
 }
 
 /* ── Clear Row ── */
@@ -424,8 +439,8 @@
   transform: scale(0.98);
 }
 
-/* ── Mobile horizontal timer — hidden on desktop ── */
-.board__timer-mobile {
+/* ── Mobile bottle timer — hidden on desktop ── */
+.board__bottle-mobile {
   display: none;
 }
 
@@ -452,28 +467,49 @@
     font-size: 0.45rem;
   }
 
-  /* ── Show horizontal timer (base display — overridden below inside side panel) ── */
-  .board__timer-mobile {
+  /* ── Mobile bottle timer styles ── */
+  .board__bottle-mobile {
+    display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
     flex-shrink: 0;
   }
 
-  .board__timer-mobile-fill {
+  .board__bottle-mobile-track {
     flex: 1;
-    height: 6px;
+    height: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,255,238,0.25);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .board__bottle-mobile-fill {
+    height: 100%;
     background: var(--accent-cyan);
-    box-shadow: 0 0 6px var(--accent-cyan);
-    border-radius: 3px;
+    box-shadow: 0 0 6px var(--accent-cyan), inset 0 0 4px rgba(255,255,255,0.2);
+    border-radius: 4px;
     transition: width 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .board__timer-mobile--danger .board__timer-mobile-fill {
+  .board__bottle-mobile--danger .board__bottle-mobile-track {
+    border-color: rgba(255,51,51,0.35);
+  }
+
+  .board__bottle-mobile--danger .board__bottle-mobile-fill {
     background: var(--accent-pink);
     box-shadow: 0 0 8px var(--accent-pink);
   }
 
-  .board__timer-mobile-num {
+  /* Refill animates 2× faster */
+  .board__bottle-mobile-fill--refilling {
+    transition: width 0.5s linear;
+  }
+
+  .board__bottle-mobile-num {
     font-family: var(--font-pixel);
     font-size: 0.45rem;
     color: var(--accent-cyan);
@@ -482,7 +518,7 @@
     transition: color var(--transition-fast);
   }
 
-  .board__timer-mobile--danger .board__timer-mobile-num {
+  .board__bottle-mobile--danger .board__bottle-mobile-num {
     color: var(--accent-pink);
     text-shadow: var(--glow-pink);
   }
@@ -560,10 +596,9 @@
     z-index: 20;
   }
 
-  /* ── Show horizontal timer inside the sticky panel ── */
-  .board__timer-mobile {
+  /* ── Show bottle timer inside the sticky panel ── */
+  .board__bottle-mobile {
     display: flex;
-    width: 100%;
   }
 
   /* ── Palette: horizontal wrapping row ── */
@@ -582,6 +617,11 @@
 
   .board__selected-hint {
     font-size: 0.38rem;
+  }
+
+  .board__selected-hint--warn {
+    font-size: 0.55rem;
+    line-height: 1.8;
   }
 
   /* ── Submit button ── */

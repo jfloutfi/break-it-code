@@ -3,24 +3,36 @@
  *
  * Counts down from `timeLimit` seconds. Calls `onExpire` when it hits 0.
  * Resets whenever `resetKey` changes (we pass the attemptNumber as the key).
+ *
+ * On reset, a short `refilling` phase is shown first (600 ms) so the bottle
+ * visually fills to max before the countdown begins.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 
+// How long the bottle refill animation lasts before countdown begins (ms)
+const REFILL_DURATION = 500
+
 export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [timeRemaining, setTimeRemaining] = useState(timeLimit)
+  const [refilling, setRefilling] = useState(false)
   const intervalRef = useRef(null)
   const expiredRef = useRef(false)
 
-  // Reset when the row changes (resetKey = attemptNumber)
+  // On reset: show full bottle for REFILL_DURATION before starting countdown
   useEffect(() => {
+    clearInterval(intervalRef.current)
     setTimeRemaining(timeLimit)
+    setRefilling(true)
     expiredRef.current = false
+
+    const refillTimer = setTimeout(() => setRefilling(false), REFILL_DURATION)
+    return () => clearTimeout(refillTimer)
   }, [resetKey, timeLimit])
 
-  // Run countdown when active and timeLimit > 0
+  // Run countdown only after refill phase is complete
   useEffect(() => {
-    if (!active || !timeLimit) return
+    if (!active || !timeLimit || refilling) return
 
     intervalRef.current = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -37,9 +49,9 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
     }, 1000)
 
     return () => clearInterval(intervalRef.current)
-  }, [active, timeLimit, resetKey, onExpire])
+  }, [active, timeLimit, resetKey, refilling, onExpire])
 
   const getTimeRemaining = useCallback(() => timeRemaining, [timeRemaining])
 
-  return { timeRemaining, getTimeRemaining }
+  return { timeRemaining, refilling, getTimeRemaining }
 }

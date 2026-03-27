@@ -32,6 +32,15 @@
 .setup__title--pink {
   color: var(--accent-pink);
   text-shadow: var(--glow-pink);
+  animation: flicker 3s infinite;
+}
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%           { opacity: 0.7; }
+  97%           { opacity: 1; }
+  98%           { opacity: 0.5; }
+  99%           { opacity: 1; }
 }
 
 .setup__subtitle {
@@ -159,11 +168,13 @@
   padding: 0.75rem 1.25rem;
   width: 100%;
   background: transparent;
-  color: var(--text-dim);
-  border: 1px solid var(--text-dim);
+  color: var(--accent-cyan);
+  border: 1px solid var(--accent-cyan);
   border-radius: 2px;
   cursor: pointer;
-  transition: color var(--transition-fast), border-color var(--transition-fast), text-shadow var(--transition-fast);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0,255,238,0.15);
+  transition: color var(--transition-fast), border-color var(--transition-fast), text-shadow var(--transition-fast), box-shadow var(--transition-fast);
   text-align: left;
   display: flex;
   justify-content: space-between;
@@ -171,9 +182,8 @@
 }
 
 .setup__htp-toggle:hover {
-  color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-  text-shadow: 0 0 6px var(--accent-cyan);
+  text-shadow: 0 0 10px var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(0,255,238,0.3);
 }
 
 .setup__htp-arrow {
