@@ -126,6 +126,8 @@ function gameReducer(state, action) {
           attemptsUsed: attemptNumber,
           slots: settings.slots,
           numColors: settings.colors,
+          duplicates: settings.duplicates,
+          feedbackMode: settings.feedbackMode,
           timeBonus: newTimeBonus,
         })
         return {
@@ -146,6 +148,8 @@ function gameReducer(state, action) {
           attemptsUsed: attemptNumber,
           slots: settings.slots,
           numColors: settings.colors,
+          duplicates: settings.duplicates,
+          feedbackMode: settings.feedbackMode,
           timeBonus: newTimeBonus,
         })
         return {
