@@ -1,7 +1,7 @@
 # Break It: Code — Product Requirements Document
 
-**Version:** 1.0  
-**Date:** March 27, 2026  
+**Version:** 2.0
+**Date:** March 27, 2026
 **Stack:** React + Vite · Deployed on Vercel  
 **Aesthetic:** Retro 80s Arcade
 
@@ -69,6 +69,7 @@ The player makes guesses and receives feedback.
 - Click a color from the palette → click an empty slot to place it
 - Or: click a filled slot to remove a color and replace it
 - A SUBMIT button activates only when all slots are filled
+- A CLEAR button wipes all slots in the active row instantly
 - After submission, feedback is shown for that row and the next row activates
 
 **Feedback display — Standard mode:**
@@ -171,15 +172,14 @@ All scoring is calculated client-side with no backend needed.
 - **Fonts:** Loaded from Google Fonts
 - **State management:** React `useState` / `useReducer` — no Redux needed
 - **Deployment:** Vercel
-- **Browser support:** Modern browsers only (Chrome, Firefox, Safari, Edge)
-- **Responsive:** Playable on desktop and tablet (mobile is a stretch goal for v1)
+- **Browser support:** Modern browsers only (Chrome, Firefox, Safari, Edge) — desktop and mobile
+- **Responsive:** Fully playable on desktop and mobile browsers
 
 ---
 
-## 7. Out of Scope (v1)
+## 7. Out of Scope (v2)
 
 - Multiplayer or leaderboards
 - Sound effects or music
 - Account creation or score persistence
-- Mobile-optimized layout
-- Accessibility (ARIA) — nice to have but not required for v1
+- Accessibility (ARIA) — nice to have but not required
