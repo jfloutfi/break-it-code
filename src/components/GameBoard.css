@@ -369,6 +369,13 @@
 }
 
 /* ── Clear Row ── */
+.board__clear-icon {
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
 .board__clear-btn {
   font-family: var(--font-pixel);
   font-size: 0.45rem;
