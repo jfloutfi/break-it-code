@@ -42,13 +42,12 @@
 }
 
 @keyframes flicker {
-  0%, 80%, 100% { opacity: 1; }
-  83%           { opacity: 0.6; }
-  86%           { opacity: 1; }
-  90%           { opacity: 0.3; }
-  93%           { opacity: 1; }
-  96%           { opacity: 0.7; }
-  99%           { opacity: 1; }
+  0%, 90%, 100% { opacity: 1; }
+  92%           { opacity: 0.6; }
+  94%           { opacity: 1; }
+  96%           { opacity: 0.3; }
+  98%           { opacity: 1; }
+  99%           { opacity: 0.7; }
 }
 
 .end__subtitle {
