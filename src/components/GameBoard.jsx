@@ -90,33 +90,34 @@ export default function GameBoard({
               {/* Row number */}
               <span className="board__row-num">{maxAttempts - rowIdx}</span>
 
-              {/* Slots */}
-              <div className="board__slots">
-                {Array.from({ length: settings.slots }, (_, slotIdx) => {
-                  const colorIdx = isSubmitted
-                    ? guess.colors[slotIdx]
-                    : isActive
-                    ? activeGuess[slotIdx]
-                    : null
+              {/* Slots + Feedback grouped tightly */}
+              <div className="board__guess">
+                <div className="board__slots">
+                  {Array.from({ length: settings.slots }, (_, slotIdx) => {
+                    const colorIdx = isSubmitted
+                      ? guess.colors[slotIdx]
+                      : isActive
+                      ? activeGuess[slotIdx]
+                      : null
 
-                  const color = colorIdx !== null && colorIdx !== undefined ? COLORS[colorIdx] : null
+                    const color = colorIdx !== null && colorIdx !== undefined ? COLORS[colorIdx] : null
 
-                  return (
-                    <button
-                      key={slotIdx}
-                      className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
-                      style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
-                      onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
-                      disabled={!isActive}
-                      aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
-                    />
-                  )
-                })}
-              </div>
+                    return (
+                      <button
+                        key={slotIdx}
+                        className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
+                        style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
+                        onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
+                        disabled={!isActive}
+                        aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
+                      />
+                    )
+                  })}
+                </div>
 
-              {/* Feedback */}
-              <div className="board__feedback">
-                {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} expired={guess.expired} />}
+                <div className="board__feedback">
+                  {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} expired={guess.expired} />}
+                </div>
               </div>
             </div>
           )

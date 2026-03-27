@@ -168,11 +168,18 @@
   text-shadow: var(--glow-pink);
 }
 
+/* ── Slots + Feedback group ── */
+.board__guess {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;  /* tight gap between slots and feedback */
+  flex: 1;
+}
+
 /* ── Slots ── */
 .board__slots {
   display: flex;
   gap: 0.5rem;
-  flex: 1;
 }
 
 .board__slot {
