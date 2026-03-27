@@ -325,6 +325,7 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
+  width: 140px; /* fixed width prevents layout shift when hint text changes */
   position: sticky;
   top: 1rem;
   align-self: flex-start;
