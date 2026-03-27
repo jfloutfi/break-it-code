@@ -15,7 +15,6 @@ export default function GameBoard({
   selectedColor,
   attemptNumber,
   maxAttempts,
-  finalScore,
   canSubmit,
   onSelectColor,
   onPlaceColor,
@@ -31,8 +30,17 @@ export default function GameBoard({
   useEffect(() => { canSubmitRef.current = canSubmit }, [canSubmit])
 
   const handleTimerExpire = useCallback(() => {
-    // Auto-submit if full, otherwise skip (burn the attempt via submit with empty slots forced)
-    onSubmit({ timerExpired: true })
+    const isFull = canSubmitRef.current
+    // Hold at zero for 1 s so the bottle is fully seen empty, then submit
+    setTimeout(() => {
+      if (isFull) {
+        // All slots filled → counts as a real guess; player gets feedback
+        onSubmit({ timeRemaining: 0 })
+      } else {
+        // Incomplete → burned attempt, red ! shown, no feedback
+        onSubmit({ timerExpired: true, timeRemaining: 0 })
+      }
+    }, 1000)
   }, [onSubmit])
 
   const { timeRemaining } = useTimer({
@@ -49,15 +57,12 @@ export default function GameBoard({
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && canSubmit) onSubmit({ timeRemaining })
     if (e.key === 'Escape') onSelectColor(null)
-  }, [canSubmit, onSubmit, onSelectColor])
+  }, [canSubmit, onSubmit, onSelectColor, timeRemaining])
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
-
-  // Live score estimate (not final yet)
-  const liveScore = finalScore?.total ?? null
 
   return (
     <div className="board">
@@ -74,76 +79,23 @@ export default function GameBoard({
         <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
       </header>
 
-      {/* ── Timer Bar (Time Attack only) ── */}
-      {timeLimit > 0 && (
-        <div className="board__timer">
-          <div
-            className={`board__timer-bar ${timerDanger ? 'board__timer-bar--danger' : ''}`}
-            style={{ width: `${timePct}%` }}
-          />
-          <span className={`board__timer-num ${timerDanger ? 'board__timer-num--danger' : ''}`}>
-            {timeRemaining}s
-          </span>
-        </div>
-      )}
+      {/* ── Main layout: palette left, rows center, bottle right ── */}
+      <div className="board__layout">
 
-      {/* ── Guess Rows ── */}
-      <div className="board__rows">
-        {Array.from({ length: maxAttempts }, (_, rowIdx) => {
-          const isSubmitted = rowIdx < guesses.length
-          const isActive = rowIdx === guesses.length
-          const guess = isSubmitted ? guesses[rowIdx] : null
-
-          return (
-            <div
-              key={rowIdx}
-              className={`board__row ${isSubmitted ? 'board__row--submitted' : ''} ${isActive ? 'board__row--active' : ''}`}
-            >
-              {/* Row number */}
-              <span className="board__row-num">{maxAttempts - rowIdx}</span>
-
-              {/* Slots */}
-              <div className="board__slots">
-                {Array.from({ length: settings.slots }, (_, slotIdx) => {
-                  const colorIdx = isSubmitted
-                    ? guess.colors[slotIdx]
-                    : isActive
-                    ? activeGuess[slotIdx]
-                    : null
-
-                  const color = colorIdx !== null && colorIdx !== undefined ? COLORS[colorIdx] : null
-
-                  return (
-                    <button
-                      key={slotIdx}
-                      className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
-                      style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
-                      onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
-                      disabled={!isActive}
-                      aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
-                    />
-                  )
-                })}
-              </div>
-
-              {/* Feedback */}
-              <div className="board__feedback">
-                {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} />}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* ── Sticky Controls: Palette + Submit ── */}
-      <div className="board__controls">
-        <div className="board__palette-section">
+        {/* ── Left Panel: Palette + Submit (sticky) ── */}
+        <div className="board__side">
+          <p className="board__side-label">COLORS</p>
           <div className="board__palette">
             {palette.map((color, idx) => (
               <button
                 key={idx}
                 className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
-                style={{ backgroundColor: color.hex, boxShadow: selectedColor === idx ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}` : `0 0 4px ${color.hex}88` }}
+                style={{
+                  backgroundColor: color.hex,
+                  boxShadow: selectedColor === idx
+                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
+                    : `0 0 4px ${color.hex}88`,
+                }}
                 onClick={() => onSelectColor(idx)}
                 aria-label={`Select ${color.name}`}
               />
@@ -151,18 +103,93 @@ export default function GameBoard({
           </div>
           {selectedColor !== null && (
             <p className="board__selected-hint">
-              {COLORS[selectedColor].name.toUpperCase()} SELECTED — CLICK A SLOT
+              {COLORS[selectedColor].name.toUpperCase()}
             </p>
+          )}
+          <button
+            className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
+            onClick={() => onSubmit({ timeRemaining })}
+            disabled={!canSubmit}
+          >
+            SUBMIT
+          </button>
+        </div>
+
+        {/* ── Guess Rows + Bottle Timer ── */}
+        <div className="board__rows-wrap">
+          <div className="board__rows">
+            {Array.from({ length: maxAttempts }, (_, rowIdx) => {
+              const isSubmitted = rowIdx < guesses.length
+              const isActive = rowIdx === guesses.length
+              const guess = isSubmitted ? guesses[rowIdx] : null
+
+              return (
+                <div
+                  key={rowIdx}
+                  className={`board__row ${isSubmitted ? 'board__row--submitted' : ''} ${isActive ? 'board__row--active' : ''}`}
+                >
+                  {/* Row number */}
+                  <span className="board__row-num">{maxAttempts - rowIdx}</span>
+
+                  {/* Slots + Feedback grouped tightly */}
+                  <div className="board__guess">
+                    <div className="board__slots">
+                      {Array.from({ length: settings.slots }, (_, slotIdx) => {
+                        const colorIdx = isSubmitted
+                          ? guess.colors[slotIdx]
+                          : isActive
+                          ? activeGuess[slotIdx]
+                          : null
+
+                        // -1 is a sentinel for an expired empty slot
+                        const color = colorIdx !== null && colorIdx !== undefined && colorIdx !== -1
+                          ? COLORS[colorIdx]
+                          : null
+
+                        return (
+                          <button
+                            key={slotIdx}
+                            className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
+                            style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
+                            onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
+                            disabled={!isActive}
+                            aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
+                          />
+                        )
+                      })}
+                    </div>
+
+                    <div className="board__feedback">
+                      {isSubmitted && (
+                        <Feedback
+                          feedback={guess.feedback}
+                          slots={settings.slots}
+                          mode={settings.feedbackMode}
+                          expired={guess.expired}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* ── Bottle Timer (Time Attack only) ── */}
+          {timeLimit > 0 && (
+            <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
+              <div className="board__bottle-track">
+                <div
+                  className="board__bottle-fill"
+                  style={{ height: `${timePct}%` }}
+                />
+              </div>
+              <span className="board__bottle-num">{timeRemaining}s</span>
+            </div>
           )}
         </div>
 
-        <button
-          className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
-          onClick={() => onSubmit({ timeRemaining })}
-          disabled={!canSubmit}
-        >
-          SUBMIT GUESS
-        </button>
+
       </div>
     </div>
   )
@@ -170,7 +197,16 @@ export default function GameBoard({
 
 // ── Feedback Pegs ────────────────────────────────────────────────────────────
 
-function Feedback({ feedback, slots, mode }) {
+function Feedback({ feedback, slots, mode, expired }) {
+  // Timer ran out — no feedback awarded; show a red exclamation instead
+  if (expired) {
+    return (
+      <div className="feedback feedback--expired">
+        <span className="feedback__expired-mark">!</span>
+      </div>
+    )
+  }
+
   if (mode === 'limited') {
     return (
       <div className="feedback feedback--limited">

@@ -38,16 +38,22 @@ export function generateCode(slots, numColors, duplicates) {
  * calculateMaxAttempts
  * Determines how many guesses the player gets based on current settings.
  * Formula from PRD: Base ceil(slots * 1.5 + 2), +2 for duplicates, +2 for limited mode, capped 6–15.
+ * Time attack adds extra attempts to compensate for the difficulty: 15s→+3, 30s→+2, 60s→+1.
  *
  * @param {number} slots        - Number of slots in the code
  * @param {boolean} duplicates  - Whether duplicates are allowed
  * @param {string} feedbackMode - 'standard' or 'limited'
+ * @param {number} timeAttack   - Seconds per attempt (0 = off)
  * @returns {number} Max attempts, between 6 and 15
  */
-export function calculateMaxAttempts(slots, duplicates, feedbackMode) {
+export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack = 0) {
   let attempts = Math.ceil(slots * 1.5 + 2)
   if (duplicates) attempts += 2
   if (feedbackMode === 'limited') attempts += 2
+  // Faster time limits are harder, so reward the player with more attempts
+  if (timeAttack === 15) attempts += 3
+  else if (timeAttack === 30) attempts += 2
+  else if (timeAttack === 60) attempts += 1
   return Math.min(15, Math.max(6, attempts))
 }
 

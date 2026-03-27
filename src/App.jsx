@@ -40,6 +40,7 @@ export default function App() {
     return (
       <EndScreen
         result={game.result}
+        gaveUp={game.gaveUp}
         code={game.code}
         finalScore={game.finalScore}
         attemptNumber={game.attemptNumber}

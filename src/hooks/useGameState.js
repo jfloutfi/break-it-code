@@ -29,6 +29,7 @@ const initialState = {
 
   // End state
   result: null,          // 'win' | 'loss'
+  gaveUp: false,         // true when player pressed Give Up
   finalScore: null,      // score breakdown object
 }
 
@@ -44,7 +45,7 @@ function gameReducer(state, action) {
 
     case 'START_GAME': {
       const { settings } = state
-      const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode)
+      const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack)
       const code = generateCode(settings.slots, settings.colors, settings.duplicates)
       return {
         ...state,
@@ -98,7 +99,7 @@ function gameReducer(state, action) {
 
       // Evaluate the guess
       const feedback = evaluateGuess(guess, code, settings.feedbackMode)
-      const newGuesses = [...guesses, { colors: guess, feedback }]
+      const newGuesses = [...guesses, { colors: guess, feedback, expired: !!timerExpired }]
       const attemptNumber = newGuesses.length
 
       // Check for time bonus
@@ -161,18 +162,13 @@ function gameReducer(state, action) {
     }
 
     case 'GIVE_UP': {
-      const { code, settings, guesses, maxAttempts, timeBonus } = state
-      const finalScore = calculateScore({
-        maxAttempts,
-        attemptsUsed: maxAttempts, // penalise as if used all attempts
-        slots: settings.slots,
-        numColors: settings.colors,
-        timeBonus,
-      })
+      // Player surrendered — score is always zero
+      const finalScore = { base: 0, efficiency: 0, difficulty: 0, timeBonus: 0, total: 0 }
       return {
         ...state,
         screen: 'end',
         result: 'loss',
+        gaveUp: true,
         finalScore,
       }
     }

@@ -3,9 +3,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 1rem 0;
+  padding: 1.5rem 1rem 2rem;
   width: 100%;
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -60,42 +60,21 @@
   border-color: var(--accent-pink);
 }
 
-/* ── Timer Bar ── */
-.board__timer {
-  width: 100%;
+/* ── Main layout: rows left, palette right ── */
+.board__layout {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* ── Rows + Bottle wrapper ── */
+.board__rows-wrap {
+  display: flex;
+  align-items: flex-start;
   gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.board__timer-bar {
   flex: 1;
-  height: 6px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px var(--accent-cyan);
-  border-radius: 3px;
-  transition: width 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.board__timer-bar--danger {
-  background: var(--accent-pink);
-  box-shadow: 0 0 10px var(--accent-pink);
-}
-
-.board__timer-num {
-  font-family: var(--font-pixel);
-  font-size: 0.6rem;
-  color: var(--accent-cyan);
-  text-shadow: 0 0 6px var(--accent-cyan);
-  min-width: 28px;
-  text-align: right;
-  transition: color var(--transition-fast);
-}
-
-.board__timer-num--danger {
-  color: var(--accent-pink);
-  text-shadow: var(--glow-pink);
+  min-width: 0;
 }
 
 /* ── Rows ── */
@@ -103,8 +82,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: 100%;
-  margin-bottom: 0;
+  flex: 1;
+  min-width: 0;
   padding-bottom: 0.5rem;
 }
 
@@ -138,24 +117,89 @@
   box-shadow: 0 0 12px rgba(184, 255, 0, 0.06);
 }
 
+/* Row numbers — bright cyan so they're easy to read */
 .board__row-num {
   font-family: var(--font-pixel);
-  font-size: 0.5rem;
-  color: var(--text-dim);
-  min-width: 18px;
+  font-size: 0.65rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  min-width: 22px;
   text-align: right;
+}
+
+/* ── Bottle Timer — sticky so it stays in view while scrolling ── */
+.board__bottle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.35rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+}
+
+.board__bottle-track {
+  width: 14px;
+  height: 260px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(0,255,238,0.25);
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* fill grows from bottom — liquid sitting at bottom */
+}
+
+.board__bottle-fill {
+  width: 100%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan), inset 0 0 6px rgba(255,255,255,0.2);
+  border-radius: 6px;
+  transition: height 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.board__bottle--danger .board__bottle-track {
+  border-color: rgba(255,51,51,0.35);
+}
+
+.board__bottle--danger .board__bottle-fill {
+  background: var(--accent-pink);
+  box-shadow: 0 0 10px var(--accent-pink);
+}
+
+.board__bottle-num {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  transition: color var(--transition-fast);
+}
+
+.board__bottle--danger .board__bottle-num {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
+}
+
+/* ── Slots + Feedback group ── */
+.board__guess {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
 }
 
 /* ── Slots ── */
 .board__slots {
   display: flex;
   gap: 0.5rem;
-  flex: 1;
 }
 
 .board__slot {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 2px solid var(--text-dim);
   background: transparent;
@@ -191,21 +235,22 @@
 
 /* ── Feedback ── */
 .board__feedback {
-  min-width: 56px;
+  min-width: 80px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 1.6rem;
 }
 
 .feedback--standard {
   display: grid;
   grid-template-columns: repeat(var(--peg-cols), 1fr);
-  gap: 3px;
+  gap: 5px;
 }
 
 .feedback__peg {
-  width: 10px;
-  height: 10px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: block;
   animation: peg-reveal 0.25s ease both;
@@ -223,19 +268,36 @@
   to   { transform: scale(1); opacity: 1; }
 }
 
+/* Black peg: bright neon fill + crisp white outline for max visibility */
 .feedback__peg--black {
-  background: #fff;
-  box-shadow: 0 0 4px #fff;
+  background: #ccff00;
+  border: 2.5px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 8px var(--accent-neon), 0 0 2px #fff;
 }
 
 .feedback__peg--white {
   background: transparent;
-  border: 1.5px solid #aaa;
+  border: 2.5px solid rgba(255,255,255,0.65);
+  box-shadow: 0 0 3px rgba(255,255,255,0.3);
 }
 
 .feedback__peg--empty {
   background: transparent;
-  border: 1.5px solid rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.feedback--expired {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback__expired-mark {
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  color: var(--accent-pink);
+  text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+  animation: peg-reveal 0.25s ease both;
 }
 
 .feedback--limited {
@@ -251,38 +313,36 @@
   text-shadow: 0 0 8px var(--accent-cyan);
 }
 
-/* ── Palette + Submit — sticky footer ── */
-.board__controls {
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to bottom, transparent, var(--bg-primary) 20%);
-  padding: 1.5rem 1rem 2rem;
+/* ── Side Panel: Palette + Submit ── */
+.board__side {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  z-index: 10;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+  padding-top: 0.35rem;
 }
 
-/* ── Palette ── */
-.board__palette-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
+.board__side-label {
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
 }
 
+/* ── Palette — 2-column grid ── */
 .board__palette {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
 }
 
 .board__color-btn {
-  width: 44px;
-  height: 44px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -300,18 +360,21 @@
 
 .board__selected-hint {
   font-family: var(--font-pixel);
-  font-size: 0.45rem;
+  font-size: 0.4rem;
   color: var(--accent-cyan);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-shadow: 0 0 6px var(--accent-cyan);
+  text-align: center;
+  max-width: 130px;
 }
 
 /* ── Submit ── */
 .board__submit-btn {
   font-family: var(--font-pixel);
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  padding: 1rem 2.5rem;
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  padding: 0.85rem 0.5rem;
+  width: 100%;
   background: transparent;
   color: var(--text-dim);
   border: 2px solid var(--text-dim);

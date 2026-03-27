@@ -24,12 +24,20 @@ export function calculateScore({ maxAttempts, attemptsUsed, slots, numColors, ti
   const difficulty = (slots * numColors) / 24
   const total = Math.round(base * efficiency * difficulty + timeBonus)
 
+  const subtotal = Math.round(base * efficiency * difficulty)
+
   return {
     base,
-    efficiency: Math.round(efficiency * 1000) / 1000, // 3 decimal places for display
+    efficiency: Math.round(efficiency * 1000) / 1000,
     difficulty: Math.round(difficulty * 1000) / 1000,
+    subtotal,
     timeBonus,
     total,
+    // context values for detailed display
+    attemptsUsed,
+    maxAttempts,
+    slots,
+    numColors,
   }
 }
 

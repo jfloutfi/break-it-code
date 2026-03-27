@@ -6,7 +6,7 @@
 import { COLORS } from '../utils/constants.js'
 import './EndScreen.css'
 
-export default function EndScreen({ result, code, finalScore, attemptNumber, maxAttempts, onPlayAgain }) {
+export default function EndScreen({ result, gaveUp, code, finalScore, attemptNumber, maxAttempts, onPlayAgain }) {
   const isWin = result === 'win'
 
   return (
@@ -15,11 +15,13 @@ export default function EndScreen({ result, code, finalScore, attemptNumber, max
       {/* ── Result Message ── */}
       <div className="end__message">
         <h1 className={`end__title ${isWin ? 'end__title--win' : 'end__title--loss'}`}>
-          {isWin ? 'YOU CRACKED IT!' : 'CODE UNBROKEN'}
+          {isWin ? 'YOU CRACKED IT!' : gaveUp ? 'YOU GAVE UP' : 'CODE UNBROKEN'}
         </h1>
         <p className="end__subtitle">
           {isWin
             ? `SOLVED IN ${attemptNumber} OF ${maxAttempts} ATTEMPTS`
+            : gaveUp
+            ? 'BETTER LUCK NEXT TIME'
             : 'THE CODE REMAINS A MYSTERY'}
         </p>
       </div>
@@ -45,31 +47,60 @@ export default function EndScreen({ result, code, finalScore, attemptNumber, max
       {/* ── Score Breakdown ── */}
       {finalScore && (
         <div className="end__score-section">
-          <p className="end__score-label">{isWin ? 'YOUR SCORE' : 'SCORE WOULD HAVE BEEN'}</p>
+          <p className="end__score-label">{isWin ? 'YOUR SCORE' : gaveUp ? 'FINAL SCORE' : 'SCORE WOULD HAVE BEEN'}</p>
           <div className="end__score-breakdown">
-            <div className="end__score-row">
-              <span className="end__score-key">BASE</span>
-              <span className="end__score-val">{finalScore.base}</span>
-            </div>
-            <div className="end__score-row">
-              <span className="end__score-key">× EFFICIENCY</span>
-              <span className="end__score-val">{finalScore.efficiency.toFixed(3)}</span>
-            </div>
-            <div className="end__score-row">
-              <span className="end__score-key">× DIFFICULTY</span>
-              <span className="end__score-val">{finalScore.difficulty.toFixed(3)}</span>
-            </div>
-            {finalScore.timeBonus > 0 && (
-              <div className="end__score-row">
-                <span className="end__score-key">+ TIME BONUS</span>
-                <span className="end__score-val end__score-val--bonus">+{finalScore.timeBonus}</span>
+            {gaveUp ? (
+              <div className="end__score-row end__score-row--total">
+                <span className="end__score-key">TOTAL</span>
+                <span className="end__score-val end__score-val--total">0</span>
               </div>
+            ) : (
+              <>
+                <div className="end__score-row end__score-row--section">
+                  <span className="end__score-key end__score-key--label">BASE SCORE</span>
+                  <span className="end__score-val">{finalScore.base}</span>
+                </div>
+
+                <div className="end__score-divider" />
+
+                <div className="end__score-row">
+                  <span className="end__score-key">× EFFICIENCY</span>
+                  <span className="end__score-val">{finalScore.efficiency.toFixed(3)}</span>
+                </div>
+                <div className="end__score-hint">
+                  {finalScore.attemptsUsed} guess{finalScore.attemptsUsed !== 1 ? 'es' : ''} used out of {finalScore.maxAttempts}
+                </div>
+
+                <div className="end__score-row">
+                  <span className="end__score-key">× DIFFICULTY</span>
+                  <span className="end__score-val">{finalScore.difficulty.toFixed(3)}</span>
+                </div>
+                <div className="end__score-hint">
+                  {finalScore.slots} slots × {finalScore.numColors} colors ÷ 24
+                </div>
+
+                <div className="end__score-divider" />
+
+                <div className="end__score-row">
+                  <span className="end__score-key">SUBTOTAL</span>
+                  <span className="end__score-val">{finalScore.subtotal}</span>
+                </div>
+
+                {finalScore.timeBonus > 0 && (
+                  <div className="end__score-row">
+                    <span className="end__score-key">+ TIME BONUS</span>
+                    <span className="end__score-val end__score-val--bonus">+{finalScore.timeBonus}</span>
+                  </div>
+                )}
+
+                <div className="end__score-divider" />
+
+                <div className="end__score-row end__score-row--total">
+                  <span className="end__score-key">TOTAL</span>
+                  <span className="end__score-val end__score-val--total">{finalScore.total}</span>
+                </div>
+              </>
             )}
-            <div className="end__score-divider" />
-            <div className="end__score-row end__score-row--total">
-              <span className="end__score-key">TOTAL</span>
-              <span className="end__score-val end__score-val--total">{finalScore.total}</span>
-            </div>
           </div>
         </div>
       )}
