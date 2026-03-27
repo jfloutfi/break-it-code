@@ -60,42 +60,12 @@
   border-color: var(--accent-pink);
 }
 
-/* ── Timer Bar ── */
-.board__timer {
-  width: 100%;
+/* ── Rows + Bottle wrapper ── */
+.board__rows-wrap {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.board__timer-bar {
-  flex: 1;
-  height: 6px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px var(--accent-cyan);
-  border-radius: 3px;
-  transition: width 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.board__timer-bar--danger {
-  background: var(--accent-pink);
-  box-shadow: 0 0 10px var(--accent-pink);
-}
-
-.board__timer-num {
-  font-family: var(--font-pixel);
-  font-size: 0.6rem;
-  color: var(--accent-cyan);
-  text-shadow: 0 0 6px var(--accent-cyan);
-  min-width: 28px;
-  text-align: right;
-  transition: color var(--transition-fast);
-}
-
-.board__timer-num--danger {
-  color: var(--accent-pink);
-  text-shadow: var(--glow-pink);
+  width: 100%;
 }
 
 /* ── Rows ── */
@@ -103,7 +73,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: 100%;
+  flex: 1;
   margin-bottom: 0;
   padding-bottom: 0.5rem;
 }
@@ -144,6 +114,58 @@
   color: var(--text-dim);
   min-width: 18px;
   text-align: right;
+}
+
+/* ── Bottle Timer ── */
+.board__bottle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.35rem;
+  flex-shrink: 0;
+}
+
+.board__bottle-track {
+  width: 14px;
+  height: 260px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(0,255,238,0.25);
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* fill grows from bottom → liquid sitting at bottom */
+}
+
+.board__bottle-fill {
+  width: 100%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan), inset 0 0 6px rgba(255,255,255,0.2);
+  border-radius: 6px;
+  transition: height 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.board__bottle--danger .board__bottle-track {
+  border-color: rgba(255,51,51,0.35);
+}
+
+.board__bottle--danger .board__bottle-fill {
+  background: var(--accent-pink);
+  box-shadow: 0 0 10px var(--accent-pink);
+}
+
+.board__bottle-num {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  transition: color var(--transition-fast);
+}
+
+.board__bottle--danger .board__bottle-num {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
 }
 
 /* ── Slots ── */

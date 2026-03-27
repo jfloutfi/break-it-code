@@ -74,21 +74,9 @@ export default function GameBoard({
         <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
       </header>
 
-      {/* ── Timer Bar (Time Attack only) ── */}
-      {timeLimit > 0 && (
-        <div className="board__timer">
-          <div
-            className={`board__timer-bar ${timerDanger ? 'board__timer-bar--danger' : ''}`}
-            style={{ width: `${timePct}%` }}
-          />
-          <span className={`board__timer-num ${timerDanger ? 'board__timer-num--danger' : ''}`}>
-            {timeRemaining}s
-          </span>
-        </div>
-      )}
-
-      {/* ── Guess Rows ── */}
-      <div className="board__rows">
+      {/* ── Guess Rows + Bottle Timer ── */}
+      <div className="board__rows-wrap">
+        <div className="board__rows">
         {Array.from({ length: maxAttempts }, (_, rowIdx) => {
           const isSubmitted = rowIdx < guesses.length
           const isActive = rowIdx === guesses.length
@@ -133,6 +121,20 @@ export default function GameBoard({
             </div>
           )
         })}
+        </div>
+
+        {/* ── Bottle Timer (Time Attack only) ── */}
+        {timeLimit > 0 && (
+          <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
+            <div className="board__bottle-track">
+              <div
+                className="board__bottle-fill"
+                style={{ height: `${timePct}%` }}
+              />
+            </div>
+            <span className="board__bottle-num">{timeRemaining}s</span>
+          </div>
+        )}
       </div>
 
       {/* ── Sticky Controls: Palette + Submit ── */}
