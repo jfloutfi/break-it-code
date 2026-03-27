@@ -60,9 +60,6 @@ export default function GameBoard({
     active: true,
   })
 
-  // Scroll to top when the board mounts so the first row is always visible
-  useEffect(() => { window.scrollTo(0, 0) }, [])
-
   const timePct = timeLimit ? (timeRemaining / timeLimit) * 100 : 100
   const timerDanger = timeLimit && timeRemaining <= Math.ceil(timeLimit * 0.25)
 
