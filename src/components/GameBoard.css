@@ -426,13 +426,10 @@
     font-size: 0.45rem;
   }
 
-  /* ── Show horizontal timer, hide vertical bottle ── */
+  /* ── Show horizontal timer (base display — overridden below inside side panel) ── */
   .board__timer-mobile {
-    display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 100%;
-    margin-bottom: 0.75rem;
     flex-shrink: 0;
   }
 
@@ -529,11 +526,18 @@
     flex-direction: column;
     align-items: center;
     gap: 0.6rem;
-    background: linear-gradient(to bottom, transparent, var(--bg-primary) 22%);
-    padding: 1rem 0.75rem 1.75rem;
+    background: var(--bg-primary);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 0.75rem 0.75rem 1.75rem;
     align-self: unset;
     top: unset;
-    padding-top: 1rem;
+    z-index: 20;
+  }
+
+  /* ── Show horizontal timer inside the sticky panel ── */
+  .board__timer-mobile {
+    display: flex;
+    width: 100%;
   }
 
   /* ── Palette: horizontal wrapping row ── */

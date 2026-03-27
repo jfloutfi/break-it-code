@@ -79,19 +79,19 @@ export default function GameBoard({
         <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
       </header>
 
-      {/* ── Mobile-only horizontal timer bar ── */}
-      {timeLimit > 0 && (
-        <div className={`board__timer-mobile ${timerDanger ? 'board__timer-mobile--danger' : ''}`}>
-          <div className="board__timer-mobile-fill" style={{ width: `${timePct}%` }} />
-          <span className="board__timer-mobile-num">{timeRemaining}s</span>
-        </div>
-      )}
-
       {/* ── Main layout: palette left, rows center, bottle right ── */}
       <div className="board__layout">
 
         {/* ── Left Panel: Palette + Submit (sticky) ── */}
         <div className="board__side">
+
+          {/* ── Mobile-only horizontal timer bar (shown above palette on mobile) ── */}
+          {timeLimit > 0 && (
+            <div className={`board__timer-mobile ${timerDanger ? 'board__timer-mobile--danger' : ''}`}>
+              <div className="board__timer-mobile-fill" style={{ width: `${timePct}%` }} />
+              <span className="board__timer-mobile-num">{timeRemaining}s</span>
+            </div>
+          )}
           <p className="board__side-label">COLORS</p>
           <div className="board__palette">
             {palette.map((color, idx) => (
