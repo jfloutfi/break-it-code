@@ -121,15 +121,13 @@ export default function GameBoard({
               />
             ))}
           </div>
-          {selectedColor !== null ? (
-            <p className="board__selected-hint">
-              {COLORS[selectedColor].name.toUpperCase()}
-            </p>
-          ) : showPickHint ? (
-            <p className="board__selected-hint board__selected-hint--warn">
-              PICK A COLOR FIRST!
-            </p>
-          ) : null}
+          <p className={`board__selected-hint${showPickHint && selectedColor === null ? ' board__selected-hint--warn' : ''}`}>
+            {selectedColor !== null
+              ? COLORS[selectedColor].name.toUpperCase()
+              : showPickHint
+              ? 'PICK A COLOR FIRST!'
+              : '\u00A0'}
+          </p>
           {/* Clear all slots in the active row */}
           <button className="board__clear-btn" onClick={onClearGuess}>
             CLEAR
