@@ -33,7 +33,7 @@
 .end__title--win {
   color: var(--accent-neon);
   text-shadow: var(--glow-neon);
-  animation: flicker 3s infinite;
+  animation: flicker 2s infinite;
 }
 
 .end__title--loss {
@@ -42,11 +42,12 @@
 }
 
 @keyframes flicker {
-  0%, 95%, 100% { opacity: 1; }
-  96%           { opacity: 0.7; }
-  97%           { opacity: 1; }
-  98%           { opacity: 0.5; }
-  99%           { opacity: 1; }
+  0%, 90%, 100% { opacity: 1; }
+  92%           { opacity: 0.6; }
+  94%           { opacity: 1; }
+  96%           { opacity: 0.3; }
+  98%           { opacity: 1; }
+  99%           { opacity: 0.7; }
 }
 
 .end__subtitle {
