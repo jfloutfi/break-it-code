@@ -169,6 +169,11 @@
   box-shadow: 0 0 10px var(--accent-pink);
 }
 
+/* Refill animates 2× faster than the 1s countdown drain */
+.board__bottle-fill--refilling {
+  transition: height 0.5s linear;
+}
+
 .board__bottle-num {
   font-family: var(--font-pixel);
   font-size: 0.5rem;
@@ -487,6 +492,11 @@
   .board__bottle-mobile--danger .board__bottle-mobile-fill {
     background: var(--accent-pink);
     box-shadow: 0 0 8px var(--accent-pink);
+  }
+
+  /* Refill animates 2× faster */
+  .board__bottle-mobile-fill--refilling {
+    transition: width 0.5s linear;
   }
 
   .board__bottle-mobile-num {
