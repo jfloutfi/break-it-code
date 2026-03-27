@@ -617,6 +617,11 @@
     font-size: 0.38rem;
   }
 
+  .board__selected-hint--warn {
+    font-size: 0.55rem;
+    line-height: 1.8;
+  }
+
   /* ── Submit button ── */
   .board__submit-btn {
     width: auto;
