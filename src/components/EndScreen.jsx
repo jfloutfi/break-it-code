@@ -6,7 +6,7 @@
 import { COLORS } from '../utils/constants.js'
 import './EndScreen.css'
 
-export default function EndScreen({ result, code, finalScore, attemptNumber, maxAttempts, onPlayAgain }) {
+export default function EndScreen({ result, gaveUp, code, finalScore, attemptNumber, maxAttempts, onPlayAgain }) {
   const isWin = result === 'win'
 
   return (
@@ -15,11 +15,13 @@ export default function EndScreen({ result, code, finalScore, attemptNumber, max
       {/* ── Result Message ── */}
       <div className="end__message">
         <h1 className={`end__title ${isWin ? 'end__title--win' : 'end__title--loss'}`}>
-          {isWin ? 'YOU CRACKED IT!' : 'CODE UNBROKEN'}
+          {isWin ? 'YOU CRACKED IT!' : gaveUp ? 'YOU GAVE UP' : 'CODE UNBROKEN'}
         </h1>
         <p className="end__subtitle">
           {isWin
             ? `SOLVED IN ${attemptNumber} OF ${maxAttempts} ATTEMPTS`
+            : gaveUp
+            ? 'BETTER LUCK NEXT TIME'
             : 'THE CODE REMAINS A MYSTERY'}
         </p>
       </div>
@@ -45,7 +47,7 @@ export default function EndScreen({ result, code, finalScore, attemptNumber, max
       {/* ── Score Breakdown ── */}
       {finalScore && (
         <div className="end__score-section">
-          <p className="end__score-label">{isWin ? 'YOUR SCORE' : 'SCORE WOULD HAVE BEEN'}</p>
+          <p className="end__score-label">{isWin ? 'YOUR SCORE' : gaveUp ? 'FINAL SCORE' : 'SCORE WOULD HAVE BEEN'}</p>
           <div className="end__score-breakdown">
             <div className="end__score-row">
               <span className="end__score-key">BASE</span>

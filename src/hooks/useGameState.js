@@ -29,6 +29,7 @@ const initialState = {
 
   // End state
   result: null,          // 'win' | 'loss'
+  gaveUp: false,         // true when player pressed Give Up
   finalScore: null,      // score breakdown object
 }
 
@@ -161,18 +162,13 @@ function gameReducer(state, action) {
     }
 
     case 'GIVE_UP': {
-      const { code, settings, guesses, maxAttempts, timeBonus } = state
-      const finalScore = calculateScore({
-        maxAttempts,
-        attemptsUsed: maxAttempts, // penalise as if used all attempts
-        slots: settings.slots,
-        numColors: settings.colors,
-        timeBonus,
-      })
+      // Player surrendered — score is always zero
+      const finalScore = { base: 0, efficiency: 0, difficulty: 0, timeBonus: 0, total: 0 }
       return {
         ...state,
         screen: 'end',
         result: 'loss',
+        gaveUp: true,
         finalScore,
       }
     }
