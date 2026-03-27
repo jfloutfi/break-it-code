@@ -15,7 +15,6 @@ export default function GameBoard({
   selectedColor,
   attemptNumber,
   maxAttempts,
-  finalScore,
   canSubmit,
   onSelectColor,
   onPlaceColor,
@@ -65,9 +64,6 @@ export default function GameBoard({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
-  // Live score estimate (not final yet)
-  const liveScore = finalScore?.total ?? null
-
   return (
     <div className="board">
 
@@ -83,79 +79,97 @@ export default function GameBoard({
         <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
       </header>
 
-      {/* ── Guess Rows + Bottle Timer ── */}
-      <div className="board__rows-wrap">
-        <div className="board__rows">
-        {Array.from({ length: maxAttempts }, (_, rowIdx) => {
-          const isSubmitted = rowIdx < guesses.length
-          const isActive = rowIdx === guesses.length
-          const guess = isSubmitted ? guesses[rowIdx] : null
+      {/* ── Main layout: rows left, palette right ── */}
+      <div className="board__layout">
 
-          return (
-            <div
-              key={rowIdx}
-              className={`board__row ${isSubmitted ? 'board__row--submitted' : ''} ${isActive ? 'board__row--active' : ''}`}
-            >
-              {/* Row number */}
-              <span className="board__row-num">{maxAttempts - rowIdx}</span>
+        {/* ── Guess Rows + Bottle Timer ── */}
+        <div className="board__rows-wrap">
+          <div className="board__rows">
+            {Array.from({ length: maxAttempts }, (_, rowIdx) => {
+              const isSubmitted = rowIdx < guesses.length
+              const isActive = rowIdx === guesses.length
+              const guess = isSubmitted ? guesses[rowIdx] : null
 
-              {/* Slots + Feedback grouped tightly */}
-              <div className="board__guess">
-                <div className="board__slots">
-                  {Array.from({ length: settings.slots }, (_, slotIdx) => {
-                    const colorIdx = isSubmitted
-                      ? guess.colors[slotIdx]
-                      : isActive
-                      ? activeGuess[slotIdx]
-                      : null
+              return (
+                <div
+                  key={rowIdx}
+                  className={`board__row ${isSubmitted ? 'board__row--submitted' : ''} ${isActive ? 'board__row--active' : ''}`}
+                >
+                  {/* Row number */}
+                  <span className="board__row-num">{maxAttempts - rowIdx}</span>
 
-                    const color = colorIdx !== null && colorIdx !== undefined ? COLORS[colorIdx] : null
+                  {/* Slots + Feedback grouped tightly */}
+                  <div className="board__guess">
+                    <div className="board__slots">
+                      {Array.from({ length: settings.slots }, (_, slotIdx) => {
+                        const colorIdx = isSubmitted
+                          ? guess.colors[slotIdx]
+                          : isActive
+                          ? activeGuess[slotIdx]
+                          : null
 
-                    return (
-                      <button
-                        key={slotIdx}
-                        className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
-                        style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
-                        onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
-                        disabled={!isActive}
-                        aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
-                      />
-                    )
-                  })}
+                        // -1 is a sentinel for an expired empty slot
+                        const color = colorIdx !== null && colorIdx !== undefined && colorIdx !== -1
+                          ? COLORS[colorIdx]
+                          : null
+
+                        return (
+                          <button
+                            key={slotIdx}
+                            className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
+                            style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
+                            onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
+                            disabled={!isActive}
+                            aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
+                          />
+                        )
+                      })}
+                    </div>
+
+                    <div className="board__feedback">
+                      {isSubmitted && (
+                        <Feedback
+                          feedback={guess.feedback}
+                          slots={settings.slots}
+                          mode={settings.feedbackMode}
+                          expired={guess.expired}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
+              )
+            })}
+          </div>
 
-                <div className="board__feedback">
-                  {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} expired={guess.expired} />}
-                </div>
+          {/* ── Bottle Timer (Time Attack only) ── */}
+          {timeLimit > 0 && (
+            <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
+              <div className="board__bottle-track">
+                <div
+                  className="board__bottle-fill"
+                  style={{ height: `${timePct}%` }}
+                />
               </div>
+              <span className="board__bottle-num">{timeRemaining}s</span>
             </div>
-          )
-        })}
+          )}
         </div>
 
-        {/* ── Bottle Timer (Time Attack only) ── */}
-        {timeLimit > 0 && (
-          <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
-            <div className="board__bottle-track">
-              <div
-                className="board__bottle-fill"
-                style={{ height: `${timePct}%` }}
-              />
-            </div>
-            <span className="board__bottle-num">{timeRemaining}s</span>
-          </div>
-        )}
-      </div>
-
-      {/* ── Sticky Controls: Palette + Submit ── */}
-      <div className="board__controls">
-        <div className="board__palette-section">
+        {/* ── Side Panel: Palette + Submit ── */}
+        <div className="board__side">
+          <p className="board__side-label">COLORS</p>
           <div className="board__palette">
             {palette.map((color, idx) => (
               <button
                 key={idx}
                 className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
-                style={{ backgroundColor: color.hex, boxShadow: selectedColor === idx ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}` : `0 0 4px ${color.hex}88` }}
+                style={{
+                  backgroundColor: color.hex,
+                  boxShadow: selectedColor === idx
+                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
+                    : `0 0 4px ${color.hex}88`,
+                }}
                 onClick={() => onSelectColor(idx)}
                 aria-label={`Select ${color.name}`}
               />
@@ -163,18 +177,18 @@ export default function GameBoard({
           </div>
           {selectedColor !== null && (
             <p className="board__selected-hint">
-              {COLORS[selectedColor].name.toUpperCase()} SELECTED — CLICK A SLOT
+              {COLORS[selectedColor].name.toUpperCase()}
             </p>
           )}
+          <button
+            className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
+            onClick={() => onSubmit({ timeRemaining })}
+            disabled={!canSubmit}
+          >
+            SUBMIT
+          </button>
         </div>
 
-        <button
-          className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
-          onClick={() => onSubmit({ timeRemaining })}
-          disabled={!canSubmit}
-        >
-          SUBMIT GUESS
-        </button>
       </div>
     </div>
   )

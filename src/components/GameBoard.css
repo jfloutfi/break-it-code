@@ -3,9 +3,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 1rem 0;
+  padding: 1.5rem 1rem 2rem;
   width: 100%;
-  max-width: 680px;
+  max-width: 960px;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -60,12 +60,21 @@
   border-color: var(--accent-pink);
 }
 
+/* ── Main layout: rows left, palette right ── */
+.board__layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 /* ── Rows + Bottle wrapper ── */
 .board__rows-wrap {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 /* ── Rows ── */
@@ -74,7 +83,7 @@
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
-  margin-bottom: 0;
+  min-width: 0;
   padding-bottom: 0.5rem;
 }
 
@@ -108,11 +117,13 @@
   box-shadow: 0 0 12px rgba(184, 255, 0, 0.06);
 }
 
+/* Row numbers — bright cyan so they're easy to read */
 .board__row-num {
   font-family: var(--font-pixel);
-  font-size: 0.5rem;
-  color: var(--text-dim);
-  min-width: 18px;
+  font-size: 0.65rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  min-width: 22px;
   text-align: right;
 }
 
@@ -135,7 +146,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* fill grows from bottom → liquid sitting at bottom */
+  justify-content: flex-end; /* fill grows from bottom — liquid sitting at bottom */
 }
 
 .board__bottle-fill {
@@ -172,8 +183,9 @@
 .board__guess {
   display: flex;
   align-items: center;
-  gap: 0.35rem;  /* tight gap between slots and feedback */
+  gap: 0.5rem;
   flex: 1;
+  min-width: 0;
 }
 
 /* ── Slots ── */
@@ -183,8 +195,8 @@
 }
 
 .board__slot {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 2px solid var(--text-dim);
   background: transparent;
@@ -220,10 +232,11 @@
 
 /* ── Feedback ── */
 .board__feedback {
-  min-width: 64px;
+  min-width: 80px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 0.6rem;
 }
 
 .feedback--standard {
@@ -233,8 +246,8 @@
 }
 
 .feedback__peg {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: block;
   animation: peg-reveal 0.25s ease both;
@@ -252,14 +265,16 @@
   to   { transform: scale(1); opacity: 1; }
 }
 
+/* Black peg: bright neon fill + crisp white outline for max visibility */
 .feedback__peg--black {
-  background: var(--accent-neon);
-  box-shadow: 0 0 6px var(--accent-neon);
+  background: #ccff00;
+  border: 2.5px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 8px var(--accent-neon), 0 0 2px #fff;
 }
 
 .feedback__peg--white {
   background: transparent;
-  border: 2px solid rgba(255,255,255,0.65);
+  border: 2.5px solid rgba(255,255,255,0.65);
   box-shadow: 0 0 3px rgba(255,255,255,0.3);
 }
 
@@ -295,38 +310,36 @@
   text-shadow: 0 0 8px var(--accent-cyan);
 }
 
-/* ── Palette + Submit — sticky footer ── */
-.board__controls {
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to bottom, transparent, var(--bg-primary) 20%);
-  padding: 1.5rem 1rem 2rem;
+/* ── Side Panel: Palette + Submit ── */
+.board__side {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  z-index: 10;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+  padding-top: 0.35rem;
 }
 
-/* ── Palette ── */
-.board__palette-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
+.board__side-label {
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
 }
 
+/* ── Palette — 2-column grid ── */
 .board__palette {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
 }
 
 .board__color-btn {
-  width: 44px;
-  height: 44px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -344,18 +357,21 @@
 
 .board__selected-hint {
   font-family: var(--font-pixel);
-  font-size: 0.45rem;
+  font-size: 0.4rem;
   color: var(--accent-cyan);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-shadow: 0 0 6px var(--accent-cyan);
+  text-align: center;
+  max-width: 130px;
 }
 
 /* ── Submit ── */
 .board__submit-btn {
   font-family: var(--font-pixel);
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  padding: 1rem 2.5rem;
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  padding: 0.85rem 0.5rem;
+  width: 100%;
   background: transparent;
   color: var(--text-dim);
   border: 2px solid var(--text-dim);
