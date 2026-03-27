@@ -127,7 +127,7 @@ export default function GameBoard({
             </p>
           ) : showPickHint ? (
             <p className="board__selected-hint board__selected-hint--warn">
-              PICK A COLOR FIRST
+              PICK A COLOR FIRST!
             </p>
           ) : null}
           {/* Clear all slots in the active row */}

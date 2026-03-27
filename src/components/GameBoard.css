@@ -377,6 +377,8 @@
 .board__selected-hint--warn {
   color: var(--accent-pink);
   text-shadow: var(--glow-pink);
+  font-size: 0.55rem;
+  letter-spacing: 2px;
 }
 
 /* ── Clear Row ── */
