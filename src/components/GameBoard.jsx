@@ -86,11 +86,13 @@ export default function GameBoard({
         {/* ── Left Panel: Palette + Submit (sticky) ── */}
         <div className="board__side">
 
-          {/* ── Mobile-only horizontal timer bar (shown above palette on mobile) ── */}
+          {/* ── Mobile-only bottle timer (shown above palette on mobile) ── */}
           {timeLimit > 0 && (
-            <div className={`board__timer-mobile ${timerDanger ? 'board__timer-mobile--danger' : ''}`}>
-              <div className="board__timer-mobile-fill" style={{ width: `${timePct}%` }} />
-              <span className="board__timer-mobile-num">{timeRemaining}s</span>
+            <div className={`board__bottle-mobile ${timerDanger ? 'board__bottle-mobile--danger' : ''}`}>
+              <div className="board__bottle-mobile-track">
+                <div className="board__bottle-mobile-fill" style={{ width: `${timePct}%` }} />
+              </div>
+              <span className="board__bottle-mobile-num">{timeRemaining}s</span>
             </div>
           )}
           <p className="board__side-label">COLORS</p>
