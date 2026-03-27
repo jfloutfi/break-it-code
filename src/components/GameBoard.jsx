@@ -19,6 +19,7 @@ export default function GameBoard({
   onSelectColor,
   onPlaceColor,
   onClearSlot,
+  onClearGuess,
   onSubmit,
   onGiveUp,
 }) {
@@ -114,6 +115,10 @@ export default function GameBoard({
               {COLORS[selectedColor].name.toUpperCase()}
             </p>
           )}
+          {/* Clear all slots in the active row */}
+          <button className="board__clear-btn" onClick={onClearGuess}>
+            CLR
+          </button>
           <button
             className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
             onClick={() => onSubmit({ timeRemaining })}

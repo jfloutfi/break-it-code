@@ -368,6 +368,28 @@
   max-width: 130px;
 }
 
+/* ── Clear Row ── */
+.board__clear-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  letter-spacing: 2px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  background: transparent;
+  color: var(--accent-pink);
+  border: 1px solid rgba(255,51,102,0.4);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  opacity: 0.7;
+}
+
+.board__clear-btn:hover {
+  opacity: 1;
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 8px rgba(255,51,102,0.3);
+}
+
 /* ── Submit ── */
 .board__submit-btn {
   font-family: var(--font-pixel);
