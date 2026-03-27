@@ -3,12 +3,14 @@
  * Player adjusts all settings before starting. Shows live attempt count.
  */
 
+import { useState } from 'react'
 import { calculateMaxAttempts } from '../utils/gameLogic.js'
 import { LIMITS, TIME_ATTACK_OPTIONS } from '../utils/constants.js'
 import './SetupScreen.css'
 
 export default function SetupScreen({ settings, onUpdate, onStart }) {
   const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack)
+  const [htpOpen, setHtpOpen] = useState(false)
 
   return (
     <div className="setup">
@@ -37,6 +39,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
               </button>
             ))}
           </div>
+          <p className="setup__tip">More slots = harder code to crack</p>
         </div>
 
         {/* ── Colors ── */}
@@ -53,6 +56,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
               </button>
             ))}
           </div>
+          <p className="setup__tip">More colors = more possible combinations</p>
         </div>
 
         {/* ── Duplicates ── */}
@@ -69,6 +73,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
               </button>
             ))}
           </div>
+          <p className="setup__tip">ON: the same color can appear more than once</p>
         </div>
 
         {/* ── Feedback Mode ── */}
@@ -85,6 +90,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
               </button>
             ))}
           </div>
+          <p className="setup__tip">Standard: exact + partial matches · Limited: count only</p>
         </div>
 
         {/* ── Time Attack ── */}
@@ -101,6 +107,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
               </button>
             ))}
           </div>
+          <p className="setup__tip">Guess before the timer runs out or lose the attempt</p>
         </div>
 
         {/* ── Attempts Preview ── */}
@@ -108,6 +115,62 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
           YOU GET <span className="setup__attempts-count">{maxAttempts}</span> ATTEMPTS
         </div>
 
+      </div>
+
+      {/* ── How to Play ── */}
+      <div className="setup__htp">
+        <button
+          className="setup__htp-toggle"
+          onClick={() => setHtpOpen((o) => !o)}
+          aria-expanded={htpOpen}
+        >
+          HOW TO PLAY <span className="setup__htp-arrow">{htpOpen ? '▴' : '▾'}</span>
+        </button>
+
+        {htpOpen && (
+          <div className="setup__htp-body">
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">OBJECTIVE</h3>
+              <p className="setup__htp-text">Crack the hidden color sequence before your attempts run out.</p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">GUESSING</h3>
+              <p className="setup__htp-text">Pick a color from the palette, then click the slots to fill them. Hit SUBMIT when all slots are filled. Use CLEAR to wipe the row and start it over.</p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">FEEDBACK — STANDARD</h3>
+              <p className="setup__htp-text">
+                Neon peg: right color, right position.<br />
+                White peg: right color, wrong position.<br />
+                Empty: color not in the code.
+              </p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">FEEDBACK — LIMITED</h3>
+              <p className="setup__htp-text">Only shows the total number of correct colors. No position info.</p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">TIME ATTACK</h3>
+              <p className="setup__htp-text">Each guess has a countdown bottle. If it empties and the row is full, it auto-submits. If incomplete, the attempt is burned — no feedback (red ! shown).</p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">SCORING</h3>
+              <p className="setup__htp-text">Fewer guesses + harder settings = higher score. Speed bonuses apply when you submit with more than half the time remaining.</p>
+            </div>
+
+            <div className="setup__htp-section">
+              <h3 className="setup__htp-heading">GIVE UP</h3>
+              <p className="setup__htp-text">Ends the game immediately. Score is zero.</p>
+            </div>
+
+          </div>
+        )}
       </div>
 
       <button className="setup__start-btn" onClick={onStart}>
