@@ -379,6 +379,7 @@
   text-shadow: var(--glow-pink);
   font-size: 0.55rem;
   letter-spacing: 2px;
+  line-height: 1.8;
 }
 
 /* ── Clear Row ── */
