@@ -19,7 +19,7 @@ export const COLORS = [
 export const DEFAULT_SETTINGS = {
   slots: 4,
   colors: 6,
-  duplicates: true,
+  duplicates: false,
   feedbackMode: 'standard',
   timeAttack: 0,
 }
