@@ -213,7 +213,7 @@
 
 /* ── Feedback ── */
 .board__feedback {
-  min-width: 56px;
+  min-width: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,12 +222,12 @@
 .feedback--standard {
   display: grid;
   grid-template-columns: repeat(var(--peg-cols), 1fr);
-  gap: 3px;
+  gap: 5px;
 }
 
 .feedback__peg {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   display: block;
   animation: peg-reveal 0.25s ease both;
@@ -246,18 +246,19 @@
 }
 
 .feedback__peg--black {
-  background: #fff;
-  box-shadow: 0 0 4px #fff;
+  background: var(--accent-neon);
+  box-shadow: 0 0 6px var(--accent-neon);
 }
 
 .feedback__peg--white {
   background: transparent;
-  border: 1.5px solid #aaa;
+  border: 2px solid rgba(255,255,255,0.65);
+  box-shadow: 0 0 3px rgba(255,255,255,0.3);
 }
 
 .feedback__peg--empty {
   background: transparent;
-  border: 1.5px solid rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.1);
 }
 
 .feedback--expired {
