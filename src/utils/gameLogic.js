@@ -56,7 +56,7 @@ export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack
   // Faster time limits are harder, so reward the player with more attempts
   if (timeAttack === 15) attempts += 3
   else if (timeAttack === 30) attempts += 2
-  else if (timeAttack === 60) attempts += 1
+  else if (timeAttack === 45) attempts += 1
   // More colors = larger search space; award extra attempts beyond the 5-color baseline
   if (numColors >= 7) attempts += 2
   else if (numColors === 6) attempts += 1
