@@ -84,6 +84,15 @@ function gameReducer(state, action) {
       return { ...state, activeGuess }
     }
 
+    case 'CLEAR_GUESS': {
+      // Wipe all slots in the active row and deselect the current colour
+      return {
+        ...state,
+        activeGuess: Array(state.settings.slots).fill(null),
+        selectedColor: null,
+      }
+    }
+
     case 'SUBMIT_GUESS': {
       const { code, settings, guesses, maxAttempts, timeBonus } = state
       const { timeRemaining, timerExpired } = action.payload || {}
@@ -196,6 +205,7 @@ export function useGameState() {
   const selectColor     = useCallback((idx) => dispatch({ type: 'SELECT_COLOR', payload: idx }), [])
   const placeColor      = useCallback((slotIdx) => dispatch({ type: 'PLACE_COLOR', payload: slotIdx }), [])
   const clearSlot       = useCallback((slotIdx) => dispatch({ type: 'CLEAR_SLOT', payload: slotIdx }), [])
+  const clearGuess      = useCallback(() => dispatch({ type: 'CLEAR_GUESS' }), [])
   const submitGuess     = useCallback((opts) => dispatch({ type: 'SUBMIT_GUESS', payload: opts }), [])
   const giveUp          = useCallback(() => dispatch({ type: 'GIVE_UP' }), [])
   const playAgain       = useCallback(() => dispatch({ type: 'PLAY_AGAIN' }), [])
@@ -211,6 +221,7 @@ export function useGameState() {
     selectColor,
     placeColor,
     clearSlot,
+    clearGuess,
     submitGuess,
     giveUp,
     playAgain,

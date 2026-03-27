@@ -19,6 +19,7 @@ export default function GameBoard({
   onSelectColor,
   onPlaceColor,
   onClearSlot,
+  onClearGuess,
   onSubmit,
   onGiveUp,
 }) {
@@ -84,6 +85,14 @@ export default function GameBoard({
 
         {/* ── Left Panel: Palette + Submit (sticky) ── */}
         <div className="board__side">
+
+          {/* ── Mobile-only horizontal timer bar (shown above palette on mobile) ── */}
+          {timeLimit > 0 && (
+            <div className={`board__timer-mobile ${timerDanger ? 'board__timer-mobile--danger' : ''}`}>
+              <div className="board__timer-mobile-fill" style={{ width: `${timePct}%` }} />
+              <span className="board__timer-mobile-num">{timeRemaining}s</span>
+            </div>
+          )}
           <p className="board__side-label">COLORS</p>
           <div className="board__palette">
             {palette.map((color, idx) => (
@@ -106,6 +115,10 @@ export default function GameBoard({
               {COLORS[selectedColor].name.toUpperCase()}
             </p>
           )}
+          {/* Clear all slots in the active row */}
+          <button className="board__clear-btn" onClick={onClearGuess}>
+            CLEAR
+          </button>
           <button
             className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
             onClick={() => onSubmit({ timeRemaining })}
