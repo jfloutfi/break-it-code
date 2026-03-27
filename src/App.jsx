@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react'
 import { useGameState } from './hooks/useGameState.js'
 import SetupScreen from './components/SetupScreen.jsx'
 import GameBoard from './components/GameBoard.jsx'
@@ -6,6 +7,14 @@ import './App.css'
 
 export default function App() {
   const game = useGameState()
+
+  // Reset scroll on every screen transition before the browser paints.
+  // overflow-x:hidden on body makes it the scroll container, so reset both.
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [game.screen])
 
   if (game.screen === 'setup') {
     return (
