@@ -117,7 +117,7 @@ export default function GameBoard({
           )}
           {/* Clear all slots in the active row */}
           <button className="board__clear-btn" onClick={onClearGuess}>
-            <span className="board__clear-icon">↺</span> CLEAR
+            CLEAR
           </button>
           <button
             className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
