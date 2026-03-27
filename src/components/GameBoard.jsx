@@ -116,7 +116,7 @@ export default function GameBoard({
 
               {/* Feedback */}
               <div className="board__feedback">
-                {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} />}
+                {isSubmitted && <Feedback feedback={guess.feedback} slots={settings.slots} mode={settings.feedbackMode} expired={guess.expired} />}
               </div>
             </div>
           )
@@ -172,7 +172,16 @@ export default function GameBoard({
 
 // ── Feedback Pegs ────────────────────────────────────────────────────────────
 
-function Feedback({ feedback, slots, mode }) {
+function Feedback({ feedback, slots, mode, expired }) {
+  // Timer ran out — no feedback awarded; show a red exclamation instead
+  if (expired) {
+    return (
+      <div className="feedback feedback--expired">
+        <span className="feedback__expired-mark">!</span>
+      </div>
+    )
+  }
+
   if (mode === 'limited') {
     return (
       <div className="feedback feedback--limited">

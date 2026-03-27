@@ -98,7 +98,7 @@ function gameReducer(state, action) {
 
       // Evaluate the guess
       const feedback = evaluateGuess(guess, code, settings.feedbackMode)
-      const newGuesses = [...guesses, { colors: guess, feedback }]
+      const newGuesses = [...guesses, { colors: guess, feedback, expired: !!timerExpired }]
       const attemptNumber = newGuesses.length
 
       // Check for time bonus

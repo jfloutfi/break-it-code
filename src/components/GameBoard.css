@@ -260,6 +260,20 @@
   border: 1.5px solid rgba(255,255,255,0.1);
 }
 
+.feedback--expired {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback__expired-mark {
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  color: var(--accent-pink);
+  text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+  animation: peg-reveal 0.25s ease both;
+}
+
 .feedback--limited {
   display: flex;
   align-items: center;
