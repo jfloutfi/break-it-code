@@ -30,6 +30,12 @@
   --transition-medium: 300ms ease;
 }
 
+/* ===== Touch Devices ===== */
+button {
+  /* Prevents double-tap zoom on iOS/Android, keeps taps snappy */
+  touch-action: manipulation;
+}
+
 /* ===== Base Styles ===== */
 html, body {
   height: 100%;

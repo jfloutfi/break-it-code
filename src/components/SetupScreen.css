@@ -159,3 +159,59 @@
 .setup__start-btn:active {
   transform: scale(0.98);
 }
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE  (≤ 599 px)
+═══════════════════════════════════════════════════════ */
+@media (max-width: 599px) {
+
+  .setup {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .setup__header {
+    margin-bottom: 2rem;
+  }
+
+  .setup__subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+
+  .setup__panel {
+    padding: 1.25rem 1rem;
+    gap: 1.25rem;
+  }
+
+  /* Stack label above options */
+  .setup__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .setup__label {
+    min-width: unset;
+    font-size: 0.55rem;
+  }
+
+  .setup__opt-btn {
+    font-size: 0.5rem;
+    padding: 0.55rem 0.7rem;
+    min-width: 38px;
+  }
+
+  .setup__opt-btn--wide {
+    min-width: 80px;
+  }
+
+  .setup__attempts {
+    font-size: 0.55rem;
+  }
+
+  .setup__start-btn {
+    font-size: 0.65rem;
+    padding: 1rem 2rem;
+    letter-spacing: 2px;
+  }
+}
