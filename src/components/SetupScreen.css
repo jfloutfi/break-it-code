@@ -1,0 +1,161 @@
+.setup {
+  animation: screen-fade-in 0.3s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem 4rem;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.setup__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.setup__title {
+  font-family: var(--font-pixel);
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  line-height: 1.6;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.setup__title--green {
+  color: var(--accent-neon);
+  text-shadow: var(--glow-neon);
+}
+
+.setup__title--pink {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
+}
+
+.setup__subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 8px var(--accent-cyan);
+  letter-spacing: 4px;
+}
+
+/* ── Panel ── */
+.setup__panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Setting Row ── */
+.setup__row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.setup__label {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  min-width: 110px;
+}
+
+.setup__options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Option Buttons ── */
+.setup__opt-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--text-dim);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), text-shadow var(--transition-fast), transform var(--transition-fast);
+  min-width: 42px;
+  text-align: center;
+}
+
+.setup__opt-btn--wide {
+  min-width: 90px;
+}
+
+.setup__opt-btn:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+  transform: scale(1.05);
+}
+
+.setup__opt-btn--active {
+  color: var(--accent-neon);
+  border-color: var(--accent-neon);
+  text-shadow: var(--glow-neon);
+  background: rgba(184, 255, 0, 0.06);
+}
+
+.setup__opt-btn--active:hover {
+  color: var(--accent-neon);
+  border-color: var(--accent-neon);
+  text-shadow: var(--glow-neon);
+}
+
+/* ── Attempts Preview ── */
+.setup__attempts {
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.setup__attempts-count {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
+  font-size: 1rem;
+  margin: 0 0.3rem;
+}
+
+/* ── Start Button ── */
+.setup__start-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  padding: 1.1rem 3rem;
+  background: transparent;
+  color: var(--accent-neon);
+  border: 2px solid var(--accent-neon);
+  text-shadow: var(--glow-neon);
+  box-shadow: 0 0 16px rgba(184,255,0,0.3), inset 0 0 16px rgba(184,255,0,0.05);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.setup__start-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(184,255,0,0.5), inset 0 0 20px rgba(184,255,0,0.1);
+}
+
+.setup__start-btn:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,28 @@
+.app--placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+
+.app__placeholder-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--accent-cyan);
+  border: 1px solid var(--accent-cyan);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.app__placeholder-btn:hover {
+  transform: scale(1.05);
+}
