@@ -125,6 +125,21 @@
   letter-spacing: 1px;
 }
 
+.end__score-key--label {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+}
+
+.end__score-hint {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.3);
+  text-align: right;
+  margin-top: -0.25rem;
+  margin-bottom: 0.15rem;
+}
+
 .end__score-val {
   font-family: var(--font-mono);
   font-size: 0.85rem;
