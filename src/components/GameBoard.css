@@ -371,6 +371,12 @@
   text-shadow: 0 0 6px var(--accent-cyan);
   text-align: center;
   max-width: 130px;
+  animation: peg-reveal 0.15s ease both;
+}
+
+.board__selected-hint--warn {
+  color: var(--accent-pink);
+  text-shadow: var(--glow-pink);
 }
 
 /* ── Clear Row ── */

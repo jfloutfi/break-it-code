@@ -3,7 +3,7 @@
  * Shows all attempt rows, the color palette, and controls.
  */
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { COLORS } from '../utils/constants.js'
 import { useTimer } from '../hooks/useTimer.js'
 import './GameBoard.css'
@@ -25,6 +25,15 @@ export default function GameBoard({
 }) {
   const palette = COLORS.slice(0, settings.colors)
   const timeLimit = settings.timeAttack || 0
+
+  // Brief "pick a color first" hint when clicking an empty slot with no color selected
+  const [showPickHint, setShowPickHint] = useState(false)
+  const pickHintTimer = useRef(null)
+  const flashPickHint = useCallback(() => {
+    setShowPickHint(true)
+    clearTimeout(pickHintTimer.current)
+    pickHintTimer.current = setTimeout(() => setShowPickHint(false), 1800)
+  }, [])
 
   // Capture latest canSubmit in a ref so the timer callback always sees current value
   const canSubmitRef = useRef(canSubmit)
@@ -112,11 +121,15 @@ export default function GameBoard({
               />
             ))}
           </div>
-          {selectedColor !== null && (
+          {selectedColor !== null ? (
             <p className="board__selected-hint">
               {COLORS[selectedColor].name.toUpperCase()}
             </p>
-          )}
+          ) : showPickHint ? (
+            <p className="board__selected-hint board__selected-hint--warn">
+              PICK A COLOR FIRST
+            </p>
+          ) : null}
           {/* Clear all slots in the active row */}
           <button className="board__clear-btn" onClick={onClearGuess}>
             CLEAR
@@ -166,7 +179,12 @@ export default function GameBoard({
                             key={slotIdx}
                             className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
                             style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
-                            onClick={() => isActive && (color ? onClearSlot(slotIdx) : onPlaceColor(slotIdx))}
+                            onClick={() => {
+                              if (!isActive) return
+                              if (color) { onClearSlot(slotIdx) }
+                              else if (selectedColor !== null) { onPlaceColor(slotIdx) }
+                              else { flashPickHint() }
+                            }}
                             disabled={!isActive}
                             aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
                           />
