@@ -5,7 +5,7 @@
   align-items: center;
   padding: 1.5rem 1rem 2rem;
   width: 100%;
-  max-width: 960px;
+  max-width: 720px;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -127,7 +127,7 @@
   text-align: right;
 }
 
-/* ── Bottle Timer ── */
+/* ── Bottle Timer — sticky so it stays in view while scrolling ── */
 .board__bottle {
   display: flex;
   flex-direction: column;
@@ -135,6 +135,9 @@
   gap: 0.4rem;
   padding-top: 0.35rem;
   flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
 }
 
 .board__bottle-track {
@@ -236,7 +239,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 0.6rem;
+  padding-left: 1.6rem;
 }
 
 .feedback--standard {

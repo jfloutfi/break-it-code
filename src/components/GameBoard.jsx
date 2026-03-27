@@ -79,8 +79,41 @@ export default function GameBoard({
         <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
       </header>
 
-      {/* ── Main layout: rows left, palette right ── */}
+      {/* ── Main layout: palette left, rows center, bottle right ── */}
       <div className="board__layout">
+
+        {/* ── Left Panel: Palette + Submit (sticky) ── */}
+        <div className="board__side">
+          <p className="board__side-label">COLORS</p>
+          <div className="board__palette">
+            {palette.map((color, idx) => (
+              <button
+                key={idx}
+                className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
+                style={{
+                  backgroundColor: color.hex,
+                  boxShadow: selectedColor === idx
+                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
+                    : `0 0 4px ${color.hex}88`,
+                }}
+                onClick={() => onSelectColor(idx)}
+                aria-label={`Select ${color.name}`}
+              />
+            ))}
+          </div>
+          {selectedColor !== null && (
+            <p className="board__selected-hint">
+              {COLORS[selectedColor].name.toUpperCase()}
+            </p>
+          )}
+          <button
+            className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
+            onClick={() => onSubmit({ timeRemaining })}
+            disabled={!canSubmit}
+          >
+            SUBMIT
+          </button>
+        </div>
 
         {/* ── Guess Rows + Bottle Timer ── */}
         <div className="board__rows-wrap">
@@ -156,38 +189,6 @@ export default function GameBoard({
           )}
         </div>
 
-        {/* ── Side Panel: Palette + Submit ── */}
-        <div className="board__side">
-          <p className="board__side-label">COLORS</p>
-          <div className="board__palette">
-            {palette.map((color, idx) => (
-              <button
-                key={idx}
-                className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
-                style={{
-                  backgroundColor: color.hex,
-                  boxShadow: selectedColor === idx
-                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
-                    : `0 0 4px ${color.hex}88`,
-                }}
-                onClick={() => onSelectColor(idx)}
-                aria-label={`Select ${color.name}`}
-              />
-            ))}
-          </div>
-          {selectedColor !== null && (
-            <p className="board__selected-hint">
-              {COLORS[selectedColor].name.toUpperCase()}
-            </p>
-          )}
-          <button
-            className={`board__submit-btn ${canSubmit ? 'board__submit-btn--ready' : ''}`}
-            onClick={() => onSubmit({ timeRemaining })}
-            disabled={!canSubmit}
-          >
-            SUBMIT
-          </button>
-        </div>
 
       </div>
     </div>
