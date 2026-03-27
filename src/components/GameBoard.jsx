@@ -181,9 +181,9 @@ export default function GameBoard({
                             style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
                             onClick={() => {
                               if (!isActive) return
-                              if (color) { onClearSlot(slotIdx) }
-                              else if (selectedColor !== null) { onPlaceColor(slotIdx) }
-                              else { flashPickHint() }
+                              if (selectedColor !== null) { onPlaceColor(slotIdx) }      // place/replace
+                              else if (color) { onClearSlot(slotIdx) }                  // no color → clear
+                              else { flashPickHint() }                                   // empty + no color → hint
                             }}
                             disabled={!isActive}
                             aria-label={color ? `${color.name} peg, click to clear` : 'Empty slot'}
