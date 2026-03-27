@@ -14,7 +14,9 @@ Configure your difficulty (slots, colors, duplicates, feedback mode, time attack
 - **White peg** — right color, wrong position
 - **Limited mode** — only shows total correct colors, no position info
 
-Score is based on efficiency (fewer guesses = higher score), difficulty settings, and time bonuses.
+Use the **CLEAR** button to wipe the active row and start it over. Score is based on efficiency (fewer guesses = higher score), difficulty settings, and time bonuses.
+
+Fully playable on desktop and mobile browsers.
 
 ---
 
