@@ -31,8 +31,17 @@ export default function GameBoard({
   useEffect(() => { canSubmitRef.current = canSubmit }, [canSubmit])
 
   const handleTimerExpire = useCallback(() => {
-    // Auto-submit if full, otherwise skip (burn the attempt via submit with empty slots forced)
-    onSubmit({ timerExpired: true })
+    const isFull = canSubmitRef.current
+    // Hold at zero for 1 s so the bottle is fully seen empty, then submit
+    setTimeout(() => {
+      if (isFull) {
+        // All slots filled → counts as a real guess; player gets feedback
+        onSubmit({ timeRemaining: 0 })
+      } else {
+        // Incomplete → burned attempt, red ! shown, no feedback
+        onSubmit({ timerExpired: true, timeRemaining: 0 })
+      }
+    }, 1000)
   }, [onSubmit])
 
   const { timeRemaining } = useTimer({
@@ -49,7 +58,7 @@ export default function GameBoard({
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && canSubmit) onSubmit({ timeRemaining })
     if (e.key === 'Escape') onSelectColor(null)
-  }, [canSubmit, onSubmit, onSelectColor])
+  }, [canSubmit, onSubmit, onSelectColor, timeRemaining])
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
