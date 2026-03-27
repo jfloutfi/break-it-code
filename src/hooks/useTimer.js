@@ -11,7 +11,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 // How long the bottle refill animation lasts before countdown begins (ms)
-const REFILL_DURATION = 600
+const REFILL_DURATION = 500
 
 export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [timeRemaining, setTimeRemaining] = useState(timeLimit)
