@@ -8,7 +8,7 @@
 import { useReducer, useCallback } from 'react'
 import { DEFAULT_SETTINGS } from '../utils/constants.js'
 import { generateCode, calculateMaxAttempts, evaluateGuess, isWin } from '../utils/gameLogic.js'
-import { calculateScore, shouldAwardTimeBonus, TIME_BONUS_PER_ATTEMPT } from '../utils/scoring.js'
+import { calculateScore, getTimeBonus } from '../utils/scoring.js'
 
 // ─── Initial State ────────────────────────────────────────────────────────────
 
@@ -111,12 +111,10 @@ function gameReducer(state, action) {
       const newGuesses = [...guesses, { colors: guess, feedback, expired: !!timerExpired }]
       const attemptNumber = newGuesses.length
 
-      // Check for time bonus
+      // Check for time bonus (tiered: >50%→+50, >25%→+25, else→+0)
       let newTimeBonus = timeBonus
       if (settings.timeAttack && timeRemaining !== undefined) {
-        if (shouldAwardTimeBonus(settings.timeAttack, timeRemaining)) {
-          newTimeBonus += TIME_BONUS_PER_ATTEMPT
-        }
+        newTimeBonus += getTimeBonus(settings.timeAttack, timeRemaining)
       }
 
       // Check win
@@ -184,10 +182,6 @@ function gameReducer(state, action) {
         gaveUp: true,
         finalScore,
       }
-    }
-
-    case 'ADD_TIME_BONUS': {
-      return { ...state, timeBonus: state.timeBonus + TIME_BONUS_PER_ATTEMPT }
     }
 
     case 'PLAY_AGAIN': {

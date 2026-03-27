@@ -53,18 +53,19 @@ export function calculateScore({ maxAttempts, attemptsUsed, slots, numColors, du
 }
 
 /**
- * shouldAwardTimeBonus
- * Returns true if a time bonus should be awarded for this attempt.
- * Bonus is given when the player submits with more than 50% of the time remaining.
+ * getTimeBonus
+ * Returns the time bonus earned for a single attempt based on how much time remained.
+ *   > 50% remaining → 50 pts
+ *   > 25% remaining → 25 pts
+ *   else            → 0 pts
  *
  * @param {number} timeLimit      - Time limit per attempt in seconds (0 = off)
  * @param {number} timeRemaining  - Seconds left when player submitted
- * @returns {boolean}
+ * @returns {number} Bonus points (50, 25, or 0)
  */
-export function shouldAwardTimeBonus(timeLimit, timeRemaining) {
-  if (!timeLimit) return false
-  return timeRemaining > timeLimit * 0.5
+export function getTimeBonus(timeLimit, timeRemaining) {
+  if (!timeLimit) return 0
+  if (timeRemaining > timeLimit * 0.5) return 50
+  if (timeRemaining > timeLimit * 0.25) return 25
+  return 0
 }
-
-/** Points awarded per qualifying attempt in time attack mode */
-export const TIME_BONUS_PER_ATTEMPT = 50
