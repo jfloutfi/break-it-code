@@ -9,7 +9,7 @@ import { LIMITS, TIME_ATTACK_OPTIONS } from '../utils/constants.js'
 import './SetupScreen.css'
 
 export default function SetupScreen({ settings, onUpdate, onStart }) {
-  const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack)
+  const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack, settings.colors)
   const [htpOpen, setHtpOpen] = useState(false)
 
   return (

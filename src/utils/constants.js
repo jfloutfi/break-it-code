@@ -19,7 +19,7 @@ export const COLORS = [
 export const DEFAULT_SETTINGS = {
   slots: 4,
   colors: 6,
-  duplicates: true,
+  duplicates: false,
   feedbackMode: 'standard',
   timeAttack: 0,
 }
@@ -36,4 +36,4 @@ export const LIMITS = {
 /**
  * Time attack options in seconds. 0 means off.
  */
-export const TIME_ATTACK_OPTIONS = [0, 15, 30, 60]
+export const TIME_ATTACK_OPTIONS = [0, 15, 30, 45]

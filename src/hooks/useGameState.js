@@ -45,7 +45,7 @@ function gameReducer(state, action) {
 
     case 'START_GAME': {
       const { settings } = state
-      const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack)
+      const maxAttempts = calculateMaxAttempts(settings.slots, settings.duplicates, settings.feedbackMode, settings.timeAttack, settings.colors)
       const code = generateCode(settings.slots, settings.colors, settings.duplicates)
       return {
         ...state,

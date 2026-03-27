@@ -37,23 +37,29 @@ export function generateCode(slots, numColors, duplicates) {
 /**
  * calculateMaxAttempts
  * Determines how many guesses the player gets based on current settings.
- * Formula from PRD: Base ceil(slots * 1.5 + 2), +2 for duplicates, +2 for limited mode, capped 6–15.
- * Time attack adds extra attempts to compensate for the difficulty: 15s→+3, 30s→+2, 60s→+1.
+ * Formula: Base ceil(slots * 1.5 + 2), +2 for duplicates, +2 for limited mode, capped 6–15.
+ * Time attack adds extra attempts to compensate for difficulty: 15s→+3, 30s→+2, 60s→+1.
+ * More colors expand the search space, so extra attempts are awarded:
+ *   4–5 colors: +0 · 6 colors: +1 · 7–8 colors: +2
  *
  * @param {number} slots        - Number of slots in the code
  * @param {boolean} duplicates  - Whether duplicates are allowed
  * @param {string} feedbackMode - 'standard' or 'limited'
  * @param {number} timeAttack   - Seconds per attempt (0 = off)
+ * @param {number} numColors    - Number of colors available (4–8)
  * @returns {number} Max attempts, between 6 and 15
  */
-export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack = 0) {
+export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack = 0, numColors = 4) {
   let attempts = Math.ceil(slots * 1.5 + 2)
   if (duplicates) attempts += 2
   if (feedbackMode === 'limited') attempts += 2
   // Faster time limits are harder, so reward the player with more attempts
   if (timeAttack === 15) attempts += 3
   else if (timeAttack === 30) attempts += 2
-  else if (timeAttack === 60) attempts += 1
+  else if (timeAttack === 45) attempts += 1
+  // More colors = larger search space; award extra attempts beyond the 5-color baseline
+  if (numColors >= 7) attempts += 2
+  else if (numColors === 6) attempts += 1
   return Math.min(15, Math.max(6, attempts))
 }
 
