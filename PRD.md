@@ -1,7 +1,7 @@
 # Break It: Code — Product Requirements Document
 
-**Version:** 2.0
-**Date:** March 27, 2026
+**Version:** 2.1
+**Date:** March 28, 2026
 **Stack:** React + Vite · Deployed on Vercel  
 **Aesthetic:** Retro 80s Arcade
 
@@ -176,6 +176,7 @@ All scoring is calculated client-side with no backend needed.
 - **Fonts:** Loaded from Google Fonts
 - **State management:** React `useState` / `useReducer` — no Redux needed
 - **Deployment:** Vercel
+- **Analytics:** Vercel Analytics + Speed Insights (injected via `@vercel/analytics` and `@vercel/speed-insights`)
 - **Browser support:** Modern browsers only (Chrome, Firefox, Safari, Edge) — desktop and mobile
 - **Responsive:** Fully playable on desktop and mobile browsers
 
