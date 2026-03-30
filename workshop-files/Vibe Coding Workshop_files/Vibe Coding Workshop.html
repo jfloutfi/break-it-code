@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Coding Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Vibe Coding Workshop_files/css2" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F7F4;
+  --white: #FFFFFF;
+  --ink: #111110;
+  --ink-2: #52524E;
+  --ink-3: #A8A8A3;
+  --ink-4: #D4D4CF;
+  --accent: #C96A20;
+  --accent-bg: #FDF3E8;
+  --border: #E4E4DF;
+  --sidebar-w: 224px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Courier New', monospace;
+}
+
+html, body { width: 100%; height: 100%; background: var(--bg); font-family: var(--font-body); color: var(--ink); -webkit-font-smoothing: antialiased; overflow: hidden; }
+#app { display: flex; height: 100vh; }
+
+/* ── Sidebar ── */
+#sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--white);
+  border-right: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 0 1.5rem;
+  overflow-y: auto;
+}
+.sidebar-logo { padding: 0 1.25rem 1.5rem; border-bottom: 0.5px solid var(--border); margin-bottom: 1.25rem; }
+.sidebar-logo-title { font-family: var(--font-display); font-size: 15px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.2; }
+.sidebar-logo-sub { font-size: 10.5px; color: var(--ink-3); margin-top: 3px; }
+.nav-section-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-4); padding: 0 1.25rem; margin-bottom: 0.35rem; margin-top: 1.25rem; }
+.nav-section-label:first-of-type { margin-top: 0; }
+.nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 1.25rem; font-size: 13px; color: var(--ink-2); cursor: pointer; transition: background 0.12s, color 0.12s; border-left: 2px solid transparent; line-height: 1.3; user-select: none; }
+.nav-item:hover { background: var(--bg); color: var(--ink); }
+.nav-item.active { color: var(--accent); background: var(--accent-bg); border-left-color: var(--accent); font-weight: 600; }
+.nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-4); flex-shrink: 0; transition: background 0.12s; }
+.nav-item.active .nav-dot { background: var(--accent); }
+
+/* ── Main ── */
+#main { flex: 1; overflow-y: auto; padding: 3rem 4rem 4rem; }
+.section { display: none; max-width: 920px; }
+.section.active { display: block; }
+
+/* ── Typography ── */
+.eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+.display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.025em; color: var(--ink); line-height: 1.0; }
+.display.xl { font-size: clamp(48px, 6.5vw, 84px); margin-bottom: 1.5rem; }
+.display.lg { font-size: clamp(32px, 4vw, 52px); margin-bottom: 1.5rem; }
+.display.md { font-size: clamp(24px, 2.8vw, 38px); margin-bottom: 1.4rem; }
+.body-lg { font-size: clamp(14px, 1.5vw, 17px); line-height: 1.75; color: var(--ink-2); max-width: 700px; }
+.body-lg strong { color: var(--ink); font-weight: 600; }
+.body-lg a { color: var(--accent); text-decoration: none; }
+.divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+/* ── Cover ── */
+.cover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 0.5px solid var(--border);
+}
+.cover-stat-block { }
+.cover-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 0.35rem; }
+.cover-stat-value { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+.cover-tagline {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: #18181B;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #D4D4D8;
+  line-height: 1.8;
+  max-width: 700px;
+}
+.cover-tagline strong { color: #FCD34D; font-weight: 600; }
+.cover-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 0.5px solid var(--border);
+}
+.cover-meta-item { font-size: 13px; color: var(--ink-3); }
+.cover-meta-item strong { display: block; font-size: 13.5px; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+
+/* ── Agenda ── */
+.agenda-list { display: grid; gap: 0; }
+.agenda-item { display: grid; grid-template-columns: 70px 1fr auto; gap: 1.25rem; padding: 11px 0; border-bottom: 0.5px solid var(--border); align-items: center; }
+.agenda-item:last-child { border-bottom: none; }
+.a-time { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+.a-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.a-dur { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+.pill { display: inline-block; font-size: 9.5px; padding: 2px 7px; border-radius: 20px; font-weight: 600; margin-left: 7px; vertical-align: middle; letter-spacing: 0.04em; }
+.p-setup  { background: #DBEAFE; color: #1D4ED8; }
+.p-build  { background: #DCFCE7; color: #15803D; }
+.p-break  { background: #FEF3C7; color: #92400E; }
+.p-deploy { background: #F3E8FF; color: #6D28D9; }
+
+/* ── Cards ── */
+.card-grid { display: grid; gap: 0.65rem; }
+.card { display: flex; gap: 0.875rem; align-items: flex-start; padding: 1rem 1.1rem; background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; }
+.card-num { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 24px; padding-top: 1px; }
+.card-icon { font-size: 18px; line-height: 1.3; min-width: 22px; }
+.card-arrow { font-size: 15px; color: var(--accent); line-height: 1.4; min-width: 18px; font-weight: 700; }
+.card-body strong { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.card-body p, .card-body span { font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+.card-body code { font-family: var(--font-mono); font-size: 11px; background: #F0EFEB; padding: 1px 5px; border-radius: 3px; }
+
+/* ── Two col ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+.col-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 0.65rem; }
+
+/* ── Prompts ── */
+.prompt { background: #18181B; border-radius: 10px; padding: 1.1rem 1.35rem; margin-bottom: 0.75rem; }
+.prompt:last-child { margin-bottom: 0; }
+.prompt-label { font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #71717A; margin-bottom: 0.5rem; font-weight: 600; }
+.prompt-text { font-size: 13px; color: #D4D4D8; line-height: 1.8; }
+.prompt-text em { color: #FCD34D; font-style: normal; font-weight: 500; }
+
+/* ── Steps ── */
+.step { display: flex; gap: 1.25rem; padding: 1.5rem 0; border-bottom: 0.5px solid var(--border); align-items: flex-start; }
+.step:last-child { border-bottom: none; }
+.step-num { font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 36px; }
+.step-body { flex: 1; }
+.step-body h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+.step-body p { font-size: 13.5px; color: var(--ink-2); line-height: 1.7; }
+.step-body p + p { margin-top: 0.5rem; }
+
+/* ── Warning card ── */
+.warn-card { background: #FFF7ED; border: 0.5px solid #FDBA74; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.warn-card strong { font-size: 13.5px; font-weight: 600; color: #92400E; display: block; margin-bottom: 3px; }
+.warn-card p { font-size: 12.5px; color: #78350F; line-height: 1.6; }
+
+/* ── Links grid ── */
+.links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.link-card { display: block; padding: 0.9rem 1rem; background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--ink); transition: border-color 0.15s, transform 0.15s; }
+.link-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.link-card-name { font-weight: 600; font-size: 13.5px; margin-bottom: 1px; }
+.link-card-url { font-size: 10.5px; color: var(--accent); font-family: var(--font-mono); }
+.link-card-desc { font-size: 11px; color: var(--ink-2); margin-top: 5px; line-height: 1.45; }
+
+/* ── Deploy ── */
+.deploy-section { margin-bottom: 2rem; }
+.deploy-title { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 0.4rem; }
+.deploy-why { font-size: 13px; color: var(--ink-3); margin-bottom: 1rem; line-height: 1.5; }
+
+/* ── Section intro ── */
+.section-intro { font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 700px; margin-bottom: 1.75rem; }
+.section-intro strong { color: var(--ink); font-weight: 600; }
+
+/* ── Done ── */
+.done-big { font-family: var(--font-display); font-size: clamp(64px, 10vw, 120px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; color: var(--ink); margin-bottom: 1.5rem; }
+.url-chip { display: inline-block; font-family: var(--font-mono); font-size: 14px; color: var(--accent); background: var(--accent-bg); padding: 0.45rem 1rem; border-radius: 7px; margin-top: 1rem; }
+
+/* ── Conditional box ── */
+.cond-box { background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 0.65rem; }
+.cond-box-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); margin-bottom: 0.4rem; }
+.cond-box-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 0.35rem; }
+.cond-box p { font-size: 12.5px; color: var(--ink-2); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">Vibe Coding<br>Workshop</div>
+      <div class="sidebar-logo-sub">Anghami · Friday</div>
+    </div>
+
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item" onclick="go(&#39;cover&#39;, this)"><div class="nav-dot"></div>Welcome</div>
+    <div class="nav-item" onclick="go(&#39;what&#39;, this)"><div class="nav-dot"></div>What is vibe coding</div>
+    <div class="nav-item" onclick="go(&#39;agenda&#39;, this)"><div class="nav-dot"></div>Agenda</div>
+    <div class="nav-item" onclick="go(&#39;rules&#39;, this)"><div class="nav-dot"></div>Rules for the day</div>
+
+    <div class="nav-section-label">The Workshop</div>
+    <div class="nav-item" onclick="go(&#39;ideas&#39;, this)"><div class="nav-dot"></div>Your idea</div>
+    <div class="nav-item" onclick="go(&#39;prompts&#39;, this)"><div class="nav-dot"></div>Planning with Claude</div>
+    <div class="nav-item" onclick="go(&#39;building&#39;, this)"><div class="nav-dot"></div>While building</div>
+    <div class="nav-item" onclick="go(&#39;deploy&#39;, this)"><div class="nav-dot"></div>Deploy</div>
+
+    <div class="nav-section-label">Reference</div>
+    <div class="nav-item active" onclick="go(&#39;links&#39;, this)"><div class="nav-dot"></div>Quick links</div>
+    <div class="nav-item" onclick="go(&#39;explore&#39;, this)"><div class="nav-dot"></div>Explore on your own</div>
+    <div class="nav-item" onclick="go(&#39;next&#39;, this)"><div class="nav-dot"></div>What's next</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <!-- WELCOME -->
+    <div class="section" id="cover">
+      <div class="eyebrow">Anghami · Abu Dhabi</div>
+      <div class="display xl">Vibe Coding<br>Workshop</div>
+      <div class="body-lg">Build something real today. Ship it by 17:00.</div>
+
+      <div class="cover-tagline">
+        The skill isn't knowing how to code. It's knowing how to <strong>think clearly and direct precisely.</strong><br>
+        Today you'll learn how to use Claude Code, how to think about products instead of features,<br>and discover tools and platforms that make building feel like superpower.
+      </div>
+
+      <div class="cover-grid">
+        <div>
+          <div class="cover-stat-label">What you'll walk out with</div>
+          <div class="cover-stat-value">A live web app — something you designed, built, and deployed in a single day. A shareable link that works anywhere in the world.</div>
+        </div>
+        <div>
+          <div class="cover-stat-label">What you'll learn</div>
+          <div class="cover-stat-value">How to use Claude Code · How to scope and ship · How to think in products, not just tasks</div>
+        </div>
+        <div>
+          <div class="cover-stat-label">No experience needed</div>
+          <div class="cover-stat-value">Product, marketing, ops, content — if you can describe what you want, you can build it today.</div>
+        </div>
+        <div>
+          <div class="cover-stat-label">Done means</div>
+          <div class="cover-stat-value">A URL you can share with anyone. Not a prototype. Something that actually runs on the internet.</div>
+        </div>
+      </div>
+
+      <div class="cover-meta-row">
+        <div class="cover-meta-item"><strong>When</strong>Friday, 10:00 – 17:00</div>
+        <div class="cover-meta-item"><strong>Where</strong>Abu Dhabi office</div>
+        <div class="cover-meta-item"><strong>Format</strong>In-person, hands-on</div>
+        <div class="cover-meta-item"><strong>Deploy to</strong>Vercel + Railway</div>
+      </div>
+    </div>
+
+    <!-- WHAT IS VIBE CODING -->
+    <div class="section" id="what">
+      <div class="eyebrow">The idea</div>
+      <div class="display lg">What is<br>Vibe Coding?</div>
+      <div class="body-lg" style="margin-bottom:1.75rem">
+        Building real software by <strong>talking to AI in plain language.</strong> You describe what you want. It writes the code, fixes the errors, and ships the thing.
+      </div>
+
+      <div class="card-grid" style="margin-bottom:1.5rem">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-body">
+            <strong>The tech is evolving extremely fast</strong>
+            <p>There are dozens of ways to build the same thing. The tools we use today may be irrelevant in six months. That's not a problem — it's the point. We're learning the <em>approach</em>, not a specific toolchain.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔭</div>
+          <div class="card-body">
+            <strong>This is a sneak peek at the current state</strong>
+            <p>What you'll see today represents where AI-assisted development is right now — a moving target. What matters is developing intuition for how to work with it.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <div class="card-body">
+            <strong>You're learning how to think in products</strong>
+            <p>Not just "build a button" — but scoping, sequencing, shipping. The same thinking that makes a great PM or designer makes a great vibe coder.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗺</div>
+          <div class="card-body">
+            <strong>You'll discover platforms that change everything</strong>
+            <p>Vercel, Railway, Clerk, Expo, Convex — tools built for exactly this kind of fast, AI-assisted building. Today you'll touch most of them.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="body-lg">
+        Six months ago this required years of training. Today it requires <strong>clarity of thought</strong> — a skill you already have.
+      </div>
+    </div>
+
+    <!-- AGENDA -->
+    <div class="section" id="agenda">
+      <div class="eyebrow">Today</div>
+      <div class="display md">The Plan</div>
+      <div class="agenda-list">
+        <div class="agenda-item"><div class="a-time">10:00</div><div class="a-name">Welcome — why this moment is different</div><div class="a-dur">15m</div></div>
+        <div class="agenda-item"><div class="a-time">10:15</div><div class="a-name">Idea pitches + scoping <span class="pill p-setup">facilitated</span></div><div class="a-dur">30m</div></div>
+        <div class="agenda-item"><div class="a-time">10:45</div><div class="a-name">Planning session with Claude <span class="pill p-setup">hands-on</span></div><div class="a-dur">45m</div></div>
+        <div class="agenda-item"><div class="a-time">11:30</div><div class="a-name">Build block 1 — scaffold + core feature <span class="pill p-build">building</span></div><div class="a-dur">90m</div></div>
+        <div class="agenda-item"><div class="a-time">13:00</div><div class="a-name">Lunch + informal screen share <span class="pill p-break">break</span></div><div class="a-dur">60m</div></div>
+        <div class="agenda-item"><div class="a-time">14:00</div><div class="a-name">Build block 2 — features + polish <span class="pill p-build">building</span></div><div class="a-dur">90m</div></div>
+        <div class="agenda-item"><div class="a-time">15:30</div><div class="a-name">Deploy to Vercel + Railway <span class="pill p-deploy">deploy</span></div><div class="a-dur">45m</div></div>
+        <div class="agenda-item"><div class="a-time">16:15</div><div class="a-name">Polish + buffer <span class="pill p-build">building</span></div><div class="a-dur">15m</div></div>
+        <div class="agenda-item"><div class="a-time">16:30</div><div class="a-name">Live demos <span class="pill p-break">closing</span></div><div class="a-dur">25m</div></div>
+        <div class="agenda-item"><div class="a-time">16:55</div><div class="a-name">Wrap + what's next</div><div class="a-dur">5m</div></div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div class="section" id="rules">
+      <div class="eyebrow">Ground rules</div>
+      <div class="display md">Three rules<br>for the day</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-num">1</div>
+          <div class="card-body">
+            <strong>Scope ruthlessly</strong>
+            <p>3 features max. Cut everything else. You can always add more after you ship — but you can't ship what isn't done. New ideas mid-build go on a "later" list, not today's scope.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-num">2</div>
+          <div class="card-body">
+            <strong>Done means a live URL</strong>
+            <p>Not "almost working". Not "it works on my machine". A shareable link anyone can open from anywhere in the world.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-num">3</div>
+          <div class="card-body">
+            <strong>Data access is limited</strong>
+            <p>You can build internal tools for Anghami — but we won't have access to production data today. Build with dummy data or manual input, and connect the real sources later.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YOUR IDEA -->
+    <div class="section" id="ideas">
+      <div class="eyebrow">10:15 — Phase 1</div>
+      <div class="display md">Your idea</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Come up with a rough idea</h3>
+          <p>It doesn't have to be work-related. A personal tool, a game, an automation, something for a hobby, an app you've always wished existed — anything goes. Rough is fine. You'll shape it in the next step.</p>
+          <div class="card-grid" style="margin-top:1rem; grid-template-columns: 1fr 1fr 1fr;">
+            <div class="card"><div class="card-icon">🛠</div><div class="card-body"><strong>A work tool</strong><span>Something that makes a task faster</span></div></div>
+            <div class="card"><div class="card-icon">🎮</div><div class="card-body"><strong>A game</strong><span>Something fun you've always wanted</span></div></div>
+            <div class="card"><div class="card-icon">📊</div><div class="card-body"><strong>A dashboard</strong><span>Visualise something you care about</span></div></div>
+            <div class="card"><div class="card-icon">💡</div><div class="card-body"><strong>A personal app</strong><span>For your life, not just work</span></div></div>
+            <div class="card"><div class="card-icon">🤖</div><div class="card-body"><strong>An AI tool</strong><span>Wrap Claude in a custom interface</span></div></div>
+            <div class="card"><div class="card-icon">⚡</div><div class="card-body"><strong>An automation</strong><span>Replace a manual process</span></div></div>
+          </div>
+          <p style="margin-top:1.5rem; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-3);">Need inspiration? Here are some ideas</p>
+          <div class="card-grid" style="margin-top:0.65rem; grid-template-columns: 1fr 1fr;">
+            <div class="card"><div class="card-icon">🎵</div><div class="card-body"><strong>Lyrics finder + sync tool</strong><span>Search for song lyrics and display them in sync with playback — useful for karaoke, content creation, or music research.</span></div></div>
+            <div class="card"><div class="card-icon">📣</div><div class="card-body"><strong>Audio ad creator</strong><span>A tool that generates scripts, selects tone and voice, and produces ready-to-use audio ads for clients from a brief.</span></div></div>
+            <div class="card"><div class="card-icon">🎨</div><div class="card-body"><strong>Creative asset generator</strong><span>Generate on-brand visuals, social media assets, and creative for Anghami and OSN+ campaigns from a prompt or template.</span></div></div>
+            <div class="card"><div class="card-icon">🔤</div><div class="card-body"><strong>Font license tracker</strong><span>A catalogue of every font the company has a license for — searchable by name, type, usage rights, and expiry date.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Talk to Claude — Chat, not Code</h3>
+          <p>Open <strong>claude.ai</strong> (not Claude Code yet). Tell it your idea as elaborately as possible. Then say:</p>
+          <div class="prompt" style="margin-top:0.75rem">
+            <div class="prompt-label">Send this message</div>
+            <div class="prompt-text">I want to build <em>[describe your idea in as much detail as possible]</em>. I'm a non-engineer and I have one day to build and deploy this using Claude Code. I want your help to think this through, then we need to come up with a product requirements document and a brief to send to Claude Code with a list of milestones and tasks.</div>
+          </div>
+          <p style="margin-top:0.75rem">Work through the conversation. Answer its questions. Push back, refine the idea, cut what's unrealistic. By the end you should have a clear PRD and a task brief you're happy with.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Create your project folder</h3>
+          <p>Create a folder on your desktop (name it after your project). Inside it, create two files from what Claude just gave you:</p>
+          <div class="card-grid" style="margin-top:0.75rem">
+            <div class="card">
+              <div class="card-icon">📄</div>
+              <div class="card-body">
+                <strong>PRD.md</strong>
+                <span>Your product requirements document — what you're building, for whom, what's in scope, what's cut.</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-icon">💬</div>
+              <div class="card-body">
+                <strong>BRIEF.md</strong>
+                <span>The message you'll send to Claude Code to kick off the build — your milestones and tasks list.</span>
+              </div>
+            </div>
+          </div>
+          <p style="margin-top:0.75rem">Now you're ready to open Claude Code and hand it the folder.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANNING WITH CLAUDE CODE -->
+    <div class="section" id="prompts">
+      <div class="eyebrow">10:45 — Planning session</div>
+      <div class="display md">Planning with<br>Claude Code</div>
+
+      <div class="section-intro">
+        Open the Claude desktop app, go to the <strong>Code tab</strong>, and point it at your project folder. Then send it your brief from BRIEF.md. It will read your files, ask clarifying questions, and propose a plan. This is the most important part of the day — <strong>don't rush it.</strong>
+      </div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Send your brief and answer its questions</h3>
+          <p>Paste the contents of BRIEF.md. Claude Code will ask questions and propose an approach. Adjust, push back, and confirm before it writes a single line of code. Get the plan right here.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Add these instructions to the plan</h3>
+          <p>Once you've agreed on the approach, add the following to your message:</p>
+          <div class="prompt" style="margin-top:0.75rem">
+            <div class="prompt-label">Paste this into Claude Code during planning</div>
+            <div class="prompt-text">Before you start building, please follow these instructions:<br><br>
+— Deploy target: <em>Vercel for the frontend, Railway for the backend/server. Set up configuration files for both from the start.</em><br>
+— Maintain an internal task list and keep it updated as you complete each step.<br>
+— Set up a Git repository from the beginning. Commit after completing each task.<br>
+— Maintain a <em>CLAUDE.md</em> file with your core instructions. Keep it short and straight to the point.<br>
+— You are a product designer with a PhD in human-computer interaction, and a super senior principal engineer building architecture that scales and is bug-free. Design and build accordingly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Conditional: if your project needs login</h3>
+          <div class="cond-box">
+            <div class="cond-box-label">If your app requires user accounts</div>
+            <div class="cond-box-title">Use Clerk for authentication</div>
+            <p>Tell Claude Code: "This project requires user login. Use Clerk for authentication — set it up as part of the scaffold." Clerk handles sign-up, sign-in, and session management out of the box. No building auth from scratch.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Conditional: if your project is a mobile app</h3>
+          <div class="cond-box">
+            <div class="cond-box-label">If you're building for iOS / Android</div>
+            <div class="cond-box-title">Use Expo instead of a web framework</div>
+            <p>Tell Claude Code: "This is a mobile app. Use Expo (React Native) as the framework. Set up the project with Expo Router." Expo lets you build and preview the app on your phone without App Store submissions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHILE BUILDING -->
+    <div class="section" id="building">
+      <div class="eyebrow">11:30 — Build blocks</div>
+      <div class="display md">While building</div>
+
+      <div class="section-intro">
+        You're in Claude Code. It's running. Here's how to stay unblocked and make progress.
+      </div>
+
+      <div class="card-grid" style="margin-bottom:1.5rem">
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Be specific, not vague</strong><p>"Add a form with a title field and a submit button that saves to the database" beats "make a form". The more precise the instruction, the better the output.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>One thing at a time</strong><p>Finish one task, check it works, then move on. Don't ask for five things in one message — it causes tangled output that's hard to review.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Use plan mode for big changes</strong><p>Before any large refactor or new feature, ask Claude to "plan this out first without touching any files". Review the plan, then proceed.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Scope creep kills ships</strong><p>New ideas mid-build go on a "later" list — not today's scope. Ship what you planned. Add more after you have a live URL.</p></div></div>
+      </div>
+
+      <hr class="divider">
+      <div class="eyebrow" style="margin-bottom:0.75rem">When things break</div>
+
+      <div class="warn-card">
+        <strong>Paste the exact error — never describe it</strong>
+        <p>When something breaks, copy the full error message from the terminal or browser console and paste it directly into Claude Code. Don't summarise, don't paraphrase. The exact text is what Claude needs.</p>
+      </div>
+
+      <div class="prompt" style="margin-top:0.75rem">
+        <div class="prompt-label">Error prompt — copy and use when needed</div>
+        <div class="prompt-text">Something went wrong. Here's the exact error:<br><br><em>[paste full error here]</em><br><br>Please fix it without changing anything else that's already working.</div>
+      </div>
+
+      <div class="prompt" style="margin-top:0.75rem">
+        <div class="prompt-label">When you're stuck and nothing makes sense</div>
+        <div class="prompt-text">I think we've gone off track. Please stop, review the current state of the project, compare it to CLAUDE.md and our original plan, and tell me what's broken and what the best path forward is.</div>
+      </div>
+
+      <div class="prompt" style="margin-top:0.75rem">
+        <div class="prompt-label">Check progress at any time</div>
+        <div class="prompt-text">What's the current state of the project? What's been completed, what's in progress, and what still needs to be done before we can deploy?</div>
+      </div>
+    </div>
+
+    <!-- DEPLOY -->
+    <div class="section" id="deploy">
+      <div class="eyebrow">15:30 — Deploy</div>
+      <div class="display md">Deploy</div>
+
+      <div class="section-intro">
+        Two platforms. Vercel hosts your frontend — the part users see. Railway hosts your backend — the server, APIs, and anything that runs code. Together they give you a fully live app.
+      </div>
+
+      <div class="deploy-section">
+        <div class="deploy-title">Vercel — your frontend</div>
+        <div class="deploy-why">Vercel is where your web app lives. It takes your code from GitHub and turns it into a public URL in about 60 seconds. Every time you push new code, it automatically redeploys. Free tier is more than enough.</div>
+        <div class="card-grid">
+          <div class="card"><div class="card-num" style="font-size:18px">1</div><div class="card-body"><strong>Create a free account</strong><p>Go to vercel.com and sign up using your GitHub account.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">2</div><div class="card-body"><strong>Import your GitHub repo</strong><p>Click "New Project" → select your repository → click Deploy. Vercel auto-detects the framework.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">3</div><div class="card-body"><strong>Add environment variables</strong><p>Go to Project Settings → Environment Variables. Add any keys Claude Code told you about (API keys, database URLs). Redeploy after saving.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">4</div><div class="card-body"><strong>Get your URL</strong><p>Your app is live at <code>yourproject.vercel.app</code>. Copy it and share it.</p></div></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="deploy-section">
+        <div class="deploy-title">Railway — your backend</div>
+        <div class="deploy-why">Railway hosts your server — any code that runs on demand, handles API requests, processes data, or connects to a database. If your project is purely a frontend with no server logic, you may not need this today. If you do, Railway is the easiest way to set it up.</div>
+        <div class="card-grid">
+          <div class="card"><div class="card-num" style="font-size:18px">1</div><div class="card-body"><strong>Create a free account</strong><p>Go to railway.app and sign up using your GitHub account.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">2</div><div class="card-body"><strong>Deploy from GitHub</strong><p>New Project → Deploy from GitHub repo → select your repo. Railway detects your server automatically.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">3</div><div class="card-body"><strong>Add environment variables</strong><p>Go to your service → Variables. Add the keys your backend needs. Railway restarts automatically.</p></div></div>
+          <div class="card"><div class="card-num" style="font-size:18px">4</div><div class="card-body"><strong>Copy the public URL</strong><p>Railway gives your backend a public URL. Paste it into your Vercel environment variables so the frontend can talk to it.</p></div></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="eyebrow" style="margin-bottom:0.75rem">Conditional setups</div>
+      <div class="card-grid">
+        <div class="cond-box">
+          <div class="cond-box-label">If your app has user login</div>
+          <div class="cond-box-title">Clerk — environment variables</div>
+          <p>Claude Code will generate Clerk keys during setup. Add them to both Vercel (frontend) and Railway (backend) under environment variables: <code>NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code> and <code>CLERK_SECRET_KEY</code>.</p>
+        </div>
+        <div class="cond-box">
+          <div class="cond-box-label">If you built a mobile app</div>
+          <div class="cond-box-title">Expo — publishing your app</div>
+          <p>Run <code>npx expo publish</code> or use Expo Go to preview on your phone. For a shareable link, use EAS Build: ask Claude Code to "build this for Expo and give me a shareable preview link".</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+      <div class="done-big">Ship it.</div>
+      <div class="body-lg">Share your link in the workshop channel.</div>
+      <div class="url-chip">yourproject.vercel.app</div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="section active" id="links">
+      <div class="eyebrow">Reference</div>
+      <div class="display md">Quick links</div>
+      <div class="links-grid">
+        <a class="link-card" href="https://claude.ai/" target="_blank">
+          <div class="link-card-name">Claude</div>
+          <div class="link-card-url">claude.ai</div>
+          <div class="link-card-desc">Planning, PRDs, brainstorming, debugging help</div>
+        </a>
+        <a class="link-card" href="https://github.com/" target="_blank">
+          <div class="link-card-name">GitHub</div>
+          <div class="link-card-url">github.com</div>
+          <div class="link-card-desc">Where your code lives and is versioned</div>
+        </a>
+        <a class="link-card" href="https://vercel.com/" target="_blank">
+          <div class="link-card-name">Vercel</div>
+          <div class="link-card-url">vercel.com</div>
+          <div class="link-card-desc">Deploy your frontend — free tier, instant deploys</div>
+        </a>
+        <a class="link-card" href="https://railway.app/" target="_blank">
+          <div class="link-card-name">Railway</div>
+          <div class="link-card-url">railway.app</div>
+          <div class="link-card-desc">Deploy your backend and server — free tier</div>
+        </a>
+        <a class="link-card" href="https://clerk.com/" target="_blank">
+          <div class="link-card-name">Clerk</div>
+          <div class="link-card-url">clerk.com</div>
+          <div class="link-card-desc">User login and authentication — drop-in, free tier</div>
+        </a>
+        <a class="link-card" href="https://expo.dev/" target="_blank">
+          <div class="link-card-name">Expo</div>
+          <div class="link-card-url">expo.dev</div>
+          <div class="link-card-desc">Build mobile apps for iOS and Android</div>
+        </a>
+        <a class="link-card" href="https://convex.dev/" target="_blank">
+          <div class="link-card-name">Convex</div>
+          <div class="link-card-url">convex.dev</div>
+          <div class="link-card-desc">Real-time database and backend — works great with Claude</div>
+        </a>
+        <a class="link-card" href="https://dodopayments.com/" target="_blank">
+          <div class="link-card-name">Dodo Payments</div>
+          <div class="link-card-url">dodopayments.com</div>
+          <div class="link-card-desc">Add payments to your app — simple API, fast setup</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- EXPLORE -->
+    <div class="section" id="explore">
+      <div class="eyebrow">Go deeper</div>
+      <div class="display md">Explore on<br>your own</div>
+      <div class="section-intro">
+        Today is just the beginning. Claude and the ecosystem around it have capabilities most people haven't discovered yet. These are worth exploring on your own time — each one meaningfully expands what you can build and how fast you can build it.
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🧩</div>
+          <div class="card-body">
+            <strong>Skills</strong>
+            <p>Reusable instruction sets that make Claude better at specific tasks — writing in your style, following your design system, or coding in your preferred patterns. Think of them as saved expertise for specific jobs.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-body">
+            <strong>Plugins</strong>
+            <p>Extend Claude Code with integrations — connect it to your tools, databases, and APIs. Plugins let Claude take actions beyond your local files: querying a service, calling an API, or reading from a third-party source.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <div class="card-body">
+            <strong>Agents</strong>
+            <p>Autonomous Claude instances that run a task end-to-end without you watching. You describe the goal, the agent works out the steps, executes them, and reports back. Great for longer tasks that don't need input at every step.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧪</div>
+          <div class="card-body">
+            <strong>Playground</strong>
+            <p>Experiment directly with Claude models at console.anthropic.com — test prompts, tweak parameters, and explore what the model can do before you build it into a product.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🖥</div>
+          <div class="card-body">
+            <strong>Claude Cowork</strong>
+            <p>An autonomous background agent that works on long, complex tasks in a cloud VM while you do other things. Give it a research, writing, or file-processing job and check back when it's done. No terminal needed.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <div class="card-body">
+            <strong>Dispatch</strong>
+            <p>Send tasks to Claude from your phone and it picks them up on your desktop. Start something on the go, have it running by the time you sit down. Bridges mobile and desktop in one continuous conversation.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏰</div>
+          <div class="card-body">
+            <strong>Scheduled Tasks</strong>
+            <p>Set Claude to run something on a schedule — daily, weekly, at a specific time. Useful for recurring reports, automated checks, digest generation, or anything you currently do manually on a cadence.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-body">
+            <strong>Claude in Chrome</strong>
+            <p>A browser extension that lets Claude read, navigate, and interact with web pages alongside you. Great for research, automating repetitive browser tasks, and acting on what's on your screen.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-body">
+            <strong>MCPs — Model Context Protocol</strong>
+            <p>A standard that lets Claude connect to any external tool or data source — your database, Slack, Google Drive, Notion, a custom API. Think of it as a universal plug for giving Claude access to the things it needs to do real work. If you can describe a data source, you can probably build an MCP for it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT'S NEXT -->
+    <div class="section" id="next">
+      <div class="eyebrow">After today</div>
+      <div class="display md">What's next</div>
+      <div class="card-grid">
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Keep building this week</strong><p>Your Claude Code access is valid all week. The best time to ship a second feature is the day after your first.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Join the workshop Slack channel</strong><p>Share what you built. Ask questions. Help each other iterate. The channel stays open.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Dubai session — next week</strong><p>Same format, different office. Share the invite with your Dubai colleagues.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>Online session — week after</strong><p>Remote-friendly format for anyone who couldn't make it in person.</p></div></div>
+        <div class="card"><div class="card-arrow">→</div><div class="card-body"><strong>1-week check-in</strong><p>We'll meet briefly to see what everyone shipped, extended, or broke since today.</p></div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function go(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+  el.classList.add('active');
+}
+</script>
+
+
+</body></html>

@@ -1,0 +1,38 @@
+Break It: Code — Game Summary
+
+Concept: Break It: Code is a customizable logic puzzle game inspired by
+Mastermind, where players must guess a hidden sequence of colors using
+strategic deduction.
+
+Objective: Guess the correct sequence of colors within a limited number
+of attempts.
+
+Core Gameplay: - The game generates a secret code based on selected
+difficulty. - The player submits guesses. - After each guess, feedback
+is provided: - Correct color in correct position - Correct color in
+wrong position (optional depending on mode) - The player wins by
+guessing the code before attempts run out.
+
+Customizable Settings: - Number of slots (3–6) - Number of colors
+(4–8) - Duplicates mode (allow or disallow repeated colors) - Limited
+feedback mode (only total correct colors, no positional hints) - Time
+attack (time limit per guess attempt)
+
+Smart Difficulty: - The number of attempts is automatically calculated
+based on slots, colors, and duplicates mode to ensure balanced gameplay.
+
+Scoring System: - Base score awarded on win - Efficiency multiplier
+based on attempts used - Difficulty multiplier based on configuration -
+Time bonus (if time attack enabled)
+
+Game Flow: 1. Setup screen (configure game settings) 2. Gameplay screen
+(make guesses and receive feedback) 3. End screen (win/lose, score,
+reveal code)
+
+Key Features: - Fully customizable difficulty - Strategic and
+logic-based gameplay - Replayable with different configurations - No
+external dependencies (fully browser-based)
+
+One-line pitch: Break It: Code is a customizable logic puzzle game where
+players design their own challenge and try to crack the hidden sequence
+efficiently.
