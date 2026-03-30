@@ -157,7 +157,7 @@
   background: var(--accent-cyan);
   box-shadow: 0 0 8px var(--accent-cyan), inset 0 0 6px rgba(255,255,255,0.2);
   border-radius: 6px;
-  transition: height 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .board__bottle--danger .board__bottle-track {
@@ -169,14 +169,9 @@
   box-shadow: 0 0 10px var(--accent-pink);
 }
 
-/* Refill animates 2× faster than the 1s countdown drain */
+/* Refill animates smoothly before countdown begins */
 .board__bottle-fill--refilling {
-  transition: height 0.5s linear;
-}
-
-/* Skip transition when time jumps (tab was backgrounded) */
-.board__bottle-fill--jumping {
-  transition: none !important;
+  transition: height 0.5s linear, background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .board__bottle-num {
@@ -502,7 +497,7 @@
     background: var(--accent-cyan);
     box-shadow: 0 0 6px var(--accent-cyan), inset 0 0 4px rgba(255,255,255,0.2);
     border-radius: 4px;
-    transition: width 1s linear, background var(--transition-fast), box-shadow var(--transition-fast);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .board__bottle-mobile--danger .board__bottle-mobile-track {
@@ -514,9 +509,9 @@
     box-shadow: 0 0 8px var(--accent-pink);
   }
 
-  /* Refill animates 2× faster */
+  /* Refill animates smoothly before countdown begins */
   .board__bottle-mobile-fill--refilling {
-    transition: width 0.5s linear;
+    transition: width 0.5s linear, background var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .board__bottle-mobile-num {
