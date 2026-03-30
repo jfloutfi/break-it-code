@@ -64,15 +64,19 @@ export default function GameBoard({
   const timerDanger = timeLimit && timeRemaining <= Math.ceil(timeLimit * 0.25)
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Enter' && canSubmit) onSubmit({ timeRemaining })
-    if (e.key === 'Escape') onSelectColor(null)
-  }, [canSubmit, onSubmit, onSelectColor, timeRemaining])
+  // Use refs for frequently-changing values so the listener doesn't re-register
+  // on every tick or state change.
+  const timeRemainingRef = useRef(timeRemaining)
+  useEffect(() => { timeRemainingRef.current = timeRemaining }, [timeRemaining])
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' && canSubmitRef.current) onSubmit({ timeRemaining: timeRemainingRef.current })
+      if (e.key === 'Escape') onSelectColor(null)
+    }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
+  }, [onSubmit, onSelectColor])
 
   return (
     <div className="board">
