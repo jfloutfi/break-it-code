@@ -188,7 +188,7 @@ function gameReducer(state, action) {
 
     case 'PLAY_AGAIN': {
       if (state.screen !== 'end') return state
-      return { ...initialState }
+      return { ...initialState, settings: { ...state.settings } }
     }
 
     default:
