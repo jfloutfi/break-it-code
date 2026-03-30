@@ -40,7 +40,7 @@ export default function App() {
         onPlaceColor={game.placeColor}
         onClearSlot={game.clearSlot}
         onClearGuess={game.clearGuess}
-        onSubmit={(opts) => game.submitGuess(opts)}
+        onSubmit={game.submitGuess}
         onGiveUp={game.giveUp}
       />
     )
