@@ -18,6 +18,8 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [refilling, setRefilling] = useState(false)
   const intervalRef = useRef(null)
   const expiredRef = useRef(false)
+  // Wall-clock timestamp when the countdown started
+  const startTimeRef = useRef(null)
   // Stable ref for onExpire so it never triggers effect re-runs
   const onExpireRef = useRef(onExpire)
   useEffect(() => { onExpireRef.current = onExpire }, [onExpire])
@@ -25,6 +27,7 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   // On reset: show full bottle for REFILL_DURATION before starting countdown
   useEffect(() => {
     clearInterval(intervalRef.current)
+    startTimeRef.current = null
     setTimeRemaining(timeLimit)
     setRefilling(true)
     expiredRef.current = false
@@ -33,23 +36,29 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
     return () => clearTimeout(refillTimer)
   }, [resetKey, timeLimit])
 
-  // Run countdown only after refill phase is complete
+  // Run countdown only after refill phase is complete.
+  // Uses wall-clock time so backgrounded tabs don't cause rapid catch-up ticks.
   useEffect(() => {
     if (!active || !timeLimit || refilling) return
 
-    intervalRef.current = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(intervalRef.current)
-          if (!expiredRef.current) {
-            expiredRef.current = true
-            onExpireRef.current()
-          }
-          return 0
+    startTimeRef.current = Date.now()
+
+    const tick = () => {
+      const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000)
+      const remaining = Math.max(0, timeLimit - elapsed)
+
+      setTimeRemaining(remaining)
+
+      if (remaining <= 0) {
+        clearInterval(intervalRef.current)
+        if (!expiredRef.current) {
+          expiredRef.current = true
+          onExpireRef.current()
         }
-        return Math.max(0, prev - 1)
-      })
-    }, 1000)
+      }
+    }
+
+    intervalRef.current = setInterval(tick, 1000)
 
     return () => clearInterval(intervalRef.current)
   }, [active, timeLimit, resetKey, refilling])
