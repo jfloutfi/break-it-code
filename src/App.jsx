@@ -19,6 +19,7 @@ export default function App() {
   if (game.screen === 'setup') {
     return (
       <SetupScreen
+        key="setup"
         settings={game.settings}
         onUpdate={game.updateSettings}
         onStart={game.startGame}
@@ -29,6 +30,7 @@ export default function App() {
   if (game.screen === 'playing') {
     return (
       <GameBoard
+        key="playing"
         settings={game.settings}
         guesses={game.guesses}
         activeGuess={game.activeGuess}
@@ -40,7 +42,7 @@ export default function App() {
         onPlaceColor={game.placeColor}
         onClearSlot={game.clearSlot}
         onClearGuess={game.clearGuess}
-        onSubmit={(opts) => game.submitGuess(opts)}
+        onSubmit={game.submitGuess}
         onGiveUp={game.giveUp}
       />
     )
@@ -49,6 +51,7 @@ export default function App() {
   if (game.screen === 'end') {
     return (
       <EndScreen
+        key="end"
         result={game.result}
         gaveUp={game.gaveUp}
         code={game.code}

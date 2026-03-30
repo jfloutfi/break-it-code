@@ -5,7 +5,7 @@
  * Each function is documented with its purpose, inputs, and outputs.
  */
 
-import { COLORS } from './constants.js'
+import { COLORS, TIME_ATTACK_OPTIONS } from './constants.js'
 
 /**
  * generateCode
@@ -17,21 +17,22 @@ import { COLORS } from './constants.js'
  * @returns {number[]} Array of color indices, e.g. [0, 3, 1, 3]
  */
 export function generateCode(slots, numColors, duplicates) {
-  const available = Array.from({ length: numColors }, (_, i) => i)
-  const code = []
-
   if (duplicates) {
     // With duplicates: pick any color each time
+    const code = []
     for (let i = 0; i < slots; i++) {
-      code.push(available[Math.floor(Math.random() * numColors)])
+      code.push(Math.floor(Math.random() * numColors))
     }
-  } else {
-    // Without duplicates: shuffle and take the first N
-    const shuffled = [...available].sort(() => Math.random() - 0.5)
-    return shuffled.slice(0, slots)
+    return code
   }
 
-  return code
+  // Without duplicates: Fisher-Yates shuffle and take the first N
+  const available = Array.from({ length: numColors }, (_, i) => i)
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[available[i], available[j]] = [available[j], available[i]]
+  }
+  return available.slice(0, slots)
 }
 
 /**
@@ -53,10 +54,13 @@ export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack
   let attempts = Math.ceil(slots * 1.5 + 2)
   if (duplicates) attempts += 2
   if (feedbackMode === 'limited') attempts += 2
-  // Faster time limits are harder, so reward the player with more attempts
-  if (timeAttack === 15) attempts += 3
-  else if (timeAttack === 30) attempts += 2
-  else if (timeAttack === 45) attempts += 1
+  // Faster time limits are harder, so reward the player with more attempts.
+  // Bonus = position from the end of TIME_ATTACK_OPTIONS (shortest → highest bonus).
+  if (timeAttack > 0) {
+    const nonZero = TIME_ATTACK_OPTIONS.filter((t) => t > 0)
+    const idx = nonZero.indexOf(timeAttack)
+    if (idx !== -1) attempts += nonZero.length - idx
+  }
   // More colors = larger search space; award extra attempts beyond the 5-color baseline
   if (numColors >= 7) attempts += 2
   else if (numColors === 6) attempts += 1
@@ -69,7 +73,9 @@ export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack
  * Standard mode: counts exact matches (black pegs) and color matches in wrong positions (white pegs).
  * Limited mode: only returns total correct colors regardless of position.
  *
- * @param {number[]} guess        - The player's guess, array of color indices
+ * @param {number[]} guess        - The player's guess, array of color indices.
+ *                                  May contain -1 for expired empty slots (timer ran out);
+ *                                  -1 will never match any valid color index (0–7).
  * @param {number[]} code         - The secret code, array of color indices
  * @param {string} feedbackMode   - 'standard' or 'limited'
  * @returns {{ black: number, white: number } | { count: number }}

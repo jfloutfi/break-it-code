@@ -34,6 +34,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
                 key={n}
                 className={`setup__opt-btn ${settings.slots === n ? 'setup__opt-btn--active' : ''}`}
                 onClick={() => onUpdate({ slots: n })}
+                aria-label={`${n} slots`}
               >
                 {n}
               </button>
@@ -51,6 +52,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
                 key={n}
                 className={`setup__opt-btn ${settings.colors === n ? 'setup__opt-btn--active' : ''}`}
                 onClick={() => onUpdate({ colors: n })}
+                aria-label={`${n} colors`}
               >
                 {n}
               </button>
@@ -68,6 +70,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
                 key={String(val)}
                 className={`setup__opt-btn ${settings.duplicates === val ? 'setup__opt-btn--active' : ''}`}
                 onClick={() => onUpdate({ duplicates: val })}
+                aria-label={val ? 'Duplicates on' : 'Duplicates off'}
               >
                 {val ? 'ON' : 'OFF'}
               </button>
@@ -85,6 +88,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
                 key={mode}
                 className={`setup__opt-btn setup__opt-btn--wide ${settings.feedbackMode === mode ? 'setup__opt-btn--active' : ''}`}
                 onClick={() => onUpdate({ feedbackMode: mode })}
+                aria-label={`${mode} feedback mode`}
               >
                 {mode === 'standard' ? 'STANDARD' : 'LIMITED'}
               </button>
@@ -102,6 +106,7 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
                 key={t}
                 className={`setup__opt-btn ${settings.timeAttack === t ? 'setup__opt-btn--active' : ''}`}
                 onClick={() => onUpdate({ timeAttack: t })}
+                aria-label={t === 0 ? 'Time attack off' : `${t} second time attack`}
               >
                 {t === 0 ? 'OFF' : `${t}S`}
               </button>

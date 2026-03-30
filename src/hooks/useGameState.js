@@ -94,6 +94,7 @@ function gameReducer(state, action) {
     }
 
     case 'SUBMIT_GUESS': {
+      if (state.screen !== 'playing') return state
       const { code, settings, guesses, maxAttempts, timeBonus } = state
       const { timeRemaining, timerExpired } = action.payload || {}
 
@@ -173,6 +174,7 @@ function gameReducer(state, action) {
     }
 
     case 'GIVE_UP': {
+      if (state.screen !== 'playing') return state
       // Player surrendered — score is always zero
       const finalScore = { base: 0, efficiency: 0, difficulty: 0, timeBonus: 0, total: 0 }
       return {
@@ -185,7 +187,8 @@ function gameReducer(state, action) {
     }
 
     case 'PLAY_AGAIN': {
-      return { ...initialState }
+      if (state.screen !== 'end') return state
+      return { ...initialState, settings: { ...state.settings } }
     }
 
     default:

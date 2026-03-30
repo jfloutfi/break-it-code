@@ -203,8 +203,8 @@
 }
 
 .board__slot {
-  width: 50px;
-  height: 50px;
+  width: clamp(36px, 7vw, 50px);
+  height: clamp(36px, 7vw, 50px);
   border-radius: 50%;
   border: 2px solid var(--text-dim);
   background: transparent;
@@ -215,6 +215,8 @@
 
 .board__slot--filled {
   border-color: transparent;
+  background-color: var(--peg-color);
+  box-shadow: 0 0 8px var(--peg-color), 0 0 20px color-mix(in srgb, var(--peg-color) 40%, transparent);
   animation: peg-pop 0.18s ease both;
 }
 
@@ -347,11 +349,13 @@
 }
 
 .board__color-btn {
-  width: 55px;
-  height: 55px;
+  width: clamp(40px, 8vw, 55px);
+  height: clamp(40px, 8vw, 55px);
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
+  background-color: var(--peg-color);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--peg-color) 53%, transparent);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -362,6 +366,7 @@
 .board__color-btn--selected {
   border-color: #fff;
   transform: scale(1.2);
+  box-shadow: 0 0 12px var(--peg-color), 0 0 30px var(--peg-color);
 }
 
 .board__selected-hint {
@@ -541,9 +546,10 @@
     display: none;
   }
 
-  /* ── Rows: pad bottom so sticky palette doesn't cover content ── */
+  /* ── Rows: pad bottom so sticky palette doesn't cover content.
+     Height estimate: palette (~8rem) + buttons (~3rem) + padding/gaps (~3rem) ── */
   .board__rows {
-    padding-bottom: 14rem;
+    padding-bottom: max(14rem, 35dvh);
   }
 
   /* ── Tighter rows ── */
@@ -555,12 +561,6 @@
   .board__row-num {
     font-size: 0.5rem;
     min-width: 16px;
-  }
-
-  /* ── Smaller slots ── */
-  .board__slot {
-    width: 36px;
-    height: 36px;
   }
 
   /* ── Feedback area ── */
@@ -607,12 +607,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
-  }
-
-  /* ── Smaller color buttons ── */
-  .board__color-btn {
-    width: 44px;
-    height: 44px;
   }
 
   .board__selected-hint {

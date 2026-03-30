@@ -64,15 +64,19 @@ export default function GameBoard({
   const timerDanger = timeLimit && timeRemaining <= Math.ceil(timeLimit * 0.25)
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Enter' && canSubmit) onSubmit({ timeRemaining })
-    if (e.key === 'Escape') onSelectColor(null)
-  }, [canSubmit, onSubmit, onSelectColor, timeRemaining])
+  // Use refs for frequently-changing values so the listener doesn't re-register
+  // on every tick or state change.
+  const timeRemainingRef = useRef(timeRemaining)
+  useEffect(() => { timeRemainingRef.current = timeRemaining }, [timeRemaining])
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' && canSubmitRef.current) onSubmit({ timeRemaining: timeRemainingRef.current })
+      if (e.key === 'Escape') onSelectColor(null)
+    }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
+  }, [onSubmit, onSelectColor])
 
   return (
     <div className="board">
@@ -86,7 +90,7 @@ export default function GameBoard({
           <span className="board__logo--green">BREAK IT:</span>
           <span className="board__logo--pink"> CODE</span>
         </h1>
-        <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
+        <button className="board__give-up-btn" onClick={onGiveUp} aria-label="Give up and end the game">GIVE UP</button>
       </header>
 
       {/* ── Main layout: palette left, rows center, bottle right ── */}
@@ -110,12 +114,7 @@ export default function GameBoard({
               <button
                 key={idx}
                 className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
-                style={{
-                  backgroundColor: color.hex,
-                  boxShadow: selectedColor === idx
-                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
-                    : `0 0 4px ${color.hex}88`,
-                }}
+                style={{ '--peg-color': color.hex }}
                 onClick={() => onSelectColor(idx)}
                 aria-label={`Select ${color.name}`}
               />
@@ -129,7 +128,7 @@ export default function GameBoard({
               : '\u00A0'}
           </p>
           {/* Clear all slots in the active row */}
-          <button className="board__clear-btn" onClick={onClearGuess}>
+          <button className="board__clear-btn" onClick={onClearGuess} aria-label="Clear all slots in current row">
             CLEAR
           </button>
           <button
@@ -176,7 +175,7 @@ export default function GameBoard({
                           <button
                             key={slotIdx}
                             className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
-                            style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
+                            style={color ? { '--peg-color': color.hex } : {}}
                             onClick={() => {
                               if (!isActive) return
                               if (selectedColor !== null) { onPlaceColor(slotIdx) }      // place/replace

@@ -18,6 +18,9 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [refilling, setRefilling] = useState(false)
   const intervalRef = useRef(null)
   const expiredRef = useRef(false)
+  // Stable ref for onExpire so it never triggers effect re-runs
+  const onExpireRef = useRef(onExpire)
+  useEffect(() => { onExpireRef.current = onExpire }, [onExpire])
 
   // On reset: show full bottle for REFILL_DURATION before starting countdown
   useEffect(() => {
@@ -40,16 +43,16 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
           clearInterval(intervalRef.current)
           if (!expiredRef.current) {
             expiredRef.current = true
-            onExpire()
+            onExpireRef.current()
           }
           return 0
         }
-        return prev - 1
+        return Math.max(0, prev - 1)
       })
     }, 1000)
 
     return () => clearInterval(intervalRef.current)
-  }, [active, timeLimit, resetKey, refilling, onExpire])
+  }, [active, timeLimit, resetKey, refilling])
 
   const getTimeRemaining = useCallback(() => timeRemaining, [timeRemaining])
 
