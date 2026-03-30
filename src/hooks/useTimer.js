@@ -47,7 +47,7 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
           }
           return 0
         }
-        return prev - 1
+        return Math.max(0, prev - 1)
       })
     }, 1000)
 

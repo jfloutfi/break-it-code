@@ -70,7 +70,9 @@ export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack
  * Standard mode: counts exact matches (black pegs) and color matches in wrong positions (white pegs).
  * Limited mode: only returns total correct colors regardless of position.
  *
- * @param {number[]} guess        - The player's guess, array of color indices
+ * @param {number[]} guess        - The player's guess, array of color indices.
+ *                                  May contain -1 for expired empty slots (timer ran out);
+ *                                  -1 will never match any valid color index (0–7).
  * @param {number[]} code         - The secret code, array of color indices
  * @param {string} feedbackMode   - 'standard' or 'limited'
  * @returns {{ black: number, white: number } | { count: number }}
