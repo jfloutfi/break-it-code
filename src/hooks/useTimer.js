@@ -16,8 +16,11 @@ const REFILL_DURATION = 500
 export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [timeRemaining, setTimeRemaining] = useState(timeLimit)
   const [refilling, setRefilling] = useState(false)
+  // True when time jumped >2s (tab return) — bottle should skip CSS transition
+  const [jumping, setJumping] = useState(false)
   const intervalRef = useRef(null)
   const expiredRef = useRef(false)
+  const prevRemainingRef = useRef(timeLimit)
   // Wall-clock timestamp when the countdown started
   const startTimeRef = useRef(null)
   // Stable ref for onExpire so it never triggers effect re-runs
@@ -28,8 +31,10 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   useEffect(() => {
     clearInterval(intervalRef.current)
     startTimeRef.current = null
+    prevRemainingRef.current = timeLimit
     setTimeRemaining(timeLimit)
     setRefilling(true)
+    setJumping(false)
     expiredRef.current = false
 
     const refillTimer = setTimeout(() => setRefilling(false), REFILL_DURATION)
@@ -46,7 +51,13 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
     const tick = () => {
       const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000)
       const remaining = Math.max(0, timeLimit - elapsed)
+      const gap = prevRemainingRef.current - remaining
 
+      // If time jumped >2s (tab was backgrounded), skip the CSS transition
+      if (gap > 2) setJumping(true)
+      else setJumping(false)
+
+      prevRemainingRef.current = remaining
       setTimeRemaining(remaining)
 
       if (remaining <= 0) {
@@ -65,5 +76,5 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
 
   const getTimeRemaining = useCallback(() => timeRemaining, [timeRemaining])
 
-  return { timeRemaining, refilling, getTimeRemaining }
+  return { timeRemaining, refilling, jumping, getTimeRemaining }
 }

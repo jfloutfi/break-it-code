@@ -53,7 +53,7 @@ export default function GameBoard({
     }, 1000)
   }, [onSubmit])
 
-  const { timeRemaining, refilling } = useTimer({
+  const { timeRemaining, refilling, jumping } = useTimer({
     timeLimit,
     resetKey: attemptNumber,
     onExpire: handleTimerExpire,
@@ -103,7 +103,7 @@ export default function GameBoard({
           {timeLimit > 0 && (
             <div className={`board__bottle-mobile ${timerDanger ? 'board__bottle-mobile--danger' : ''}`}>
               <div className="board__bottle-mobile-track">
-                <div className={`board__bottle-mobile-fill ${refilling ? 'board__bottle-mobile-fill--refilling' : ''}`} style={{ width: `${timePct}%` }} />
+                <div className={`board__bottle-mobile-fill ${refilling ? 'board__bottle-mobile-fill--refilling' : ''} ${jumping ? 'board__bottle-fill--jumping' : ''}`} style={{ width: `${timePct}%` }} />
               </div>
               <span className="board__bottle-mobile-num">{timeRemaining}s</span>
             </div>
@@ -210,7 +210,7 @@ export default function GameBoard({
             <div className={`board__bottle ${timerDanger ? 'board__bottle--danger' : ''}`}>
               <div className="board__bottle-track">
                 <div
-                  className={`board__bottle-fill ${refilling ? 'board__bottle-fill--refilling' : ''}`}
+                  className={`board__bottle-fill ${refilling ? 'board__bottle-fill--refilling' : ''} ${jumping ? 'board__bottle-fill--jumping' : ''}`}
                   style={{ height: `${timePct}%` }}
                 />
               </div>
