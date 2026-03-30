@@ -215,6 +215,8 @@
 
 .board__slot--filled {
   border-color: transparent;
+  background-color: var(--peg-color);
+  box-shadow: 0 0 8px var(--peg-color), 0 0 20px color-mix(in srgb, var(--peg-color) 40%, transparent);
   animation: peg-pop 0.18s ease both;
 }
 
@@ -352,6 +354,8 @@
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
+  background-color: var(--peg-color);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--peg-color) 53%, transparent);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -362,6 +366,7 @@
 .board__color-btn--selected {
   border-color: #fff;
   transform: scale(1.2);
+  box-shadow: 0 0 12px var(--peg-color), 0 0 30px var(--peg-color);
 }
 
 .board__selected-hint {

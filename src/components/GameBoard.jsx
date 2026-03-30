@@ -110,12 +110,7 @@ export default function GameBoard({
               <button
                 key={idx}
                 className={`board__color-btn ${selectedColor === idx ? 'board__color-btn--selected' : ''}`}
-                style={{
-                  backgroundColor: color.hex,
-                  boxShadow: selectedColor === idx
-                    ? `0 0 12px ${color.hex}, 0 0 30px ${color.hex}`
-                    : `0 0 4px ${color.hex}88`,
-                }}
+                style={{ '--peg-color': color.hex }}
                 onClick={() => onSelectColor(idx)}
                 aria-label={`Select ${color.name}`}
               />
@@ -176,7 +171,7 @@ export default function GameBoard({
                           <button
                             key={slotIdx}
                             className={`board__slot ${color ? 'board__slot--filled' : 'board__slot--empty'} ${isActive ? 'board__slot--clickable' : ''}`}
-                            style={color ? { backgroundColor: color.hex, boxShadow: `0 0 8px ${color.hex}, 0 0 20px ${color.hex}66` } : {}}
+                            style={color ? { '--peg-color': color.hex } : {}}
                             onClick={() => {
                               if (!isActive) return
                               if (selectedColor !== null) { onPlaceColor(slotIdx) }      // place/replace

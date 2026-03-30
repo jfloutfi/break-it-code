@@ -36,7 +36,7 @@ export default function EndScreen({ result, gaveUp, code, finalScore, attemptNum
               <div
                 key={i}
                 className="end__code-peg"
-                style={{ backgroundColor: color.hex, boxShadow: `0 0 12px ${color.hex}, 0 0 30px ${color.hex}66` }}
+                style={{ '--peg-color': color.hex }}
                 title={color.name}
               />
             )
