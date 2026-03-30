@@ -546,9 +546,10 @@
     display: none;
   }
 
-  /* ── Rows: pad bottom so sticky palette doesn't cover content ── */
+  /* ── Rows: pad bottom so sticky palette doesn't cover content.
+     Height estimate: palette (~8rem) + buttons (~3rem) + padding/gaps (~3rem) ── */
   .board__rows {
-    padding-bottom: 14rem;
+    padding-bottom: max(14rem, 35dvh);
   }
 
   /* ── Tighter rows ── */
