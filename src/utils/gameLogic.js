@@ -17,21 +17,22 @@ import { COLORS } from './constants.js'
  * @returns {number[]} Array of color indices, e.g. [0, 3, 1, 3]
  */
 export function generateCode(slots, numColors, duplicates) {
-  const available = Array.from({ length: numColors }, (_, i) => i)
-  const code = []
-
   if (duplicates) {
     // With duplicates: pick any color each time
+    const code = []
     for (let i = 0; i < slots; i++) {
-      code.push(available[Math.floor(Math.random() * numColors)])
+      code.push(Math.floor(Math.random() * numColors))
     }
-  } else {
-    // Without duplicates: shuffle and take the first N
-    const shuffled = [...available].sort(() => Math.random() - 0.5)
-    return shuffled.slice(0, slots)
+    return code
   }
 
-  return code
+  // Without duplicates: Fisher-Yates shuffle and take the first N
+  const available = Array.from({ length: numColors }, (_, i) => i)
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[available[i], available[j]] = [available[j], available[i]]
+  }
+  return available.slice(0, slots)
 }
 
 /**
