@@ -203,8 +203,8 @@
 }
 
 .board__slot {
-  width: 50px;
-  height: 50px;
+  width: clamp(36px, 7vw, 50px);
+  height: clamp(36px, 7vw, 50px);
   border-radius: 50%;
   border: 2px solid var(--text-dim);
   background: transparent;
@@ -349,8 +349,8 @@
 }
 
 .board__color-btn {
-  width: 55px;
-  height: 55px;
+  width: clamp(40px, 8vw, 55px);
+  height: clamp(40px, 8vw, 55px);
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -562,12 +562,6 @@
     min-width: 16px;
   }
 
-  /* ── Smaller slots ── */
-  .board__slot {
-    width: 36px;
-    height: 36px;
-  }
-
   /* ── Feedback area ── */
   .board__feedback {
     min-width: 52px;
@@ -612,12 +606,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
-  }
-
-  /* ── Smaller color buttons ── */
-  .board__color-btn {
-    width: 44px;
-    height: 44px;
   }
 
   .board__selected-hint {
