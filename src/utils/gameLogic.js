@@ -5,7 +5,7 @@
  * Each function is documented with its purpose, inputs, and outputs.
  */
 
-import { COLORS } from './constants.js'
+import { COLORS, TIME_ATTACK_OPTIONS } from './constants.js'
 
 /**
  * generateCode
@@ -54,10 +54,13 @@ export function calculateMaxAttempts(slots, duplicates, feedbackMode, timeAttack
   let attempts = Math.ceil(slots * 1.5 + 2)
   if (duplicates) attempts += 2
   if (feedbackMode === 'limited') attempts += 2
-  // Faster time limits are harder, so reward the player with more attempts
-  if (timeAttack === 15) attempts += 3
-  else if (timeAttack === 30) attempts += 2
-  else if (timeAttack === 45) attempts += 1
+  // Faster time limits are harder, so reward the player with more attempts.
+  // Bonus = position from the end of TIME_ATTACK_OPTIONS (shortest → highest bonus).
+  if (timeAttack > 0) {
+    const nonZero = TIME_ATTACK_OPTIONS.filter((t) => t > 0)
+    const idx = nonZero.indexOf(timeAttack)
+    if (idx !== -1) attempts += nonZero.length - idx
+  }
   // More colors = larger search space; award extra attempts beyond the 5-color baseline
   if (numColors >= 7) attempts += 2
   else if (numColors === 6) attempts += 1
