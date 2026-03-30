@@ -86,7 +86,7 @@ export default function GameBoard({
           <span className="board__logo--green">BREAK IT:</span>
           <span className="board__logo--pink"> CODE</span>
         </h1>
-        <button className="board__give-up-btn" onClick={onGiveUp}>GIVE UP</button>
+        <button className="board__give-up-btn" onClick={onGiveUp} aria-label="Give up and end the game">GIVE UP</button>
       </header>
 
       {/* ── Main layout: palette left, rows center, bottle right ── */}
@@ -129,7 +129,7 @@ export default function GameBoard({
               : '\u00A0'}
           </p>
           {/* Clear all slots in the active row */}
-          <button className="board__clear-btn" onClick={onClearGuess}>
+          <button className="board__clear-btn" onClick={onClearGuess} aria-label="Clear all slots in current row">
             CLEAR
           </button>
           <button
