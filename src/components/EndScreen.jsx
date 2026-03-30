@@ -56,41 +56,48 @@ export default function EndScreen({ result, gaveUp, code, finalScore, attemptNum
               </div>
             ) : (
               <>
-                <div className="end__score-row end__score-row--section">
-                  <span className="end__score-key end__score-key--label">BASE SCORE</span>
-                  <span className="end__score-val">{finalScore.base}</span>
+                {/* Performance */}
+                <div className="end__score-section-header">PERFORMANCE</div>
+                <div className="end__score-row">
+                  <span className="end__score-key">Guesses used</span>
+                  <span className="end__score-val">{finalScore.attemptsUsed} of {finalScore.maxAttempts}</span>
+                </div>
+
+                <div className="end__score-divider" />
+
+                {/* Difficulty Settings */}
+                <div className="end__score-section-header">DIFFICULTY SETTINGS</div>
+                <div className="end__score-row">
+                  <span className="end__score-key">Code length</span>
+                  <span className="end__score-val">{finalScore.slots} slots</span>
+                </div>
+                <div className="end__score-row">
+                  <span className="end__score-key">Color pool</span>
+                  <span className="end__score-val">{finalScore.numColors} colors</span>
+                </div>
+                <div className="end__score-row">
+                  <span className="end__score-key">Duplicates</span>
+                  <span className={`end__score-val${finalScore.duplicates ? ' end__score-val--harder' : ''}`}>
+                    {finalScore.duplicates ? 'ALLOWED' : 'OFF'}
+                  </span>
+                </div>
+                <div className="end__score-row">
+                  <span className="end__score-key">Feedback mode</span>
+                  <span className={`end__score-val${finalScore.feedbackMode === 'limited' ? ' end__score-val--harder' : ''}`}>
+                    {finalScore.feedbackMode === 'limited' ? 'LIMITED' : 'STANDARD'}
+                  </span>
                 </div>
 
                 <div className="end__score-divider" />
 
                 <div className="end__score-row">
-                  <span className="end__score-key">× EFFICIENCY</span>
-                  <span className="end__score-val">{finalScore.efficiency.toFixed(3)}</span>
-                </div>
-                <div className="end__score-hint">
-                  {finalScore.attemptsUsed} guess{finalScore.attemptsUsed !== 1 ? 'es' : ''} used out of {finalScore.maxAttempts}
-                </div>
-
-                <div className="end__score-row">
-                  <span className="end__score-key">× DIFFICULTY</span>
-                  <span className="end__score-val">{finalScore.difficulty.toFixed(3)}</span>
-                </div>
-                <div className="end__score-hint">
-                  {finalScore.slots} slots × {finalScore.numColors} colors ÷ 24
-                  {finalScore.duplicates ? ' × 1.25 (dupes)' : ''}
-                  {finalScore.feedbackMode === 'limited' ? ' × 1.25 (limited)' : ''}
-                </div>
-
-                <div className="end__score-divider" />
-
-                <div className="end__score-row">
-                  <span className="end__score-key">SUBTOTAL</span>
+                  <span className="end__score-key end__score-key--label">SCORE</span>
                   <span className="end__score-val">{finalScore.subtotal}</span>
                 </div>
 
                 {finalScore.timeBonus > 0 && (
                   <div className="end__score-row">
-                    <span className="end__score-key">+ TIME BONUS</span>
+                    <span className="end__score-key">Time bonus</span>
                     <span className="end__score-val end__score-val--bonus">+{finalScore.timeBonus}</span>
                   </div>
                 )}

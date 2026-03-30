@@ -89,6 +89,19 @@
 }
 
 /* ── Score Breakdown ── */
+.end__score-section-header {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  margin-bottom: 0.15rem;
+}
+
+.end__score-val--harder {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 6px var(--accent-cyan);
+}
+
 .end__score-section {
   width: 100%;
   max-width: 360px;
@@ -132,14 +145,6 @@
   letter-spacing: 2px;
 }
 
-.end__score-hint {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.3);
-  text-align: right;
-  margin-top: -0.25rem;
-  margin-bottom: 0.15rem;
-}
 
 .end__score-val {
   font-family: var(--font-mono);
@@ -255,10 +260,6 @@
 
   .end__score-val {
     font-size: 0.75rem;
-  }
-
-  .end__score-hint {
-    font-size: 0.55rem;
   }
 
   .end__play-again-btn {

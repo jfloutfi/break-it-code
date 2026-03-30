@@ -105,7 +105,7 @@ Shown on win or loss.
 **Win state:**
 - "YOU CRACKED IT!" message
 - Show the secret code (revealed)
-- Show final score with full breakdown: base, efficiency, difficulty (with modifier hints), time bonus, total
+- Show final score with full breakdown: performance (guesses used of max), difficulty settings (code length, color pool, duplicates, feedback mode), subtotal, time bonus, total — no raw multipliers or formula notation shown to the player
 - Play Again button (returns to Setup Screen)
 
 **Lose state:**
