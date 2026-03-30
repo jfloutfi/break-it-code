@@ -4,8 +4,11 @@
  * Counts down from `timeLimit` seconds. Calls `onExpire` when it hits 0.
  * Resets whenever `resetKey` changes (we pass the attemptNumber as the key).
  *
- * On reset, a short `refilling` phase is shown first (600 ms) so the bottle
+ * On reset, a short `refilling` phase is shown first (500 ms) so the bottle
  * visually fills to max before the countdown begins.
+ *
+ * The bottle visual is driven by requestAnimationFrame using wall-clock time,
+ * so it stays accurate even when the browser throttles timers in background tabs.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -16,7 +19,9 @@ const REFILL_DURATION = 500
 export function useTimer({ timeLimit, resetKey, onExpire, active }) {
   const [timeRemaining, setTimeRemaining] = useState(timeLimit)
   const [refilling, setRefilling] = useState(false)
-  const intervalRef = useRef(null)
+  // Smooth 0–100 percentage driven by rAF, used for the bottle fill
+  const [timePct, setTimePct] = useState(100)
+  const rafRef = useRef(null)
   const expiredRef = useRef(false)
   // Wall-clock timestamp when the countdown started
   const startTimeRef = useRef(null)
@@ -26,9 +31,10 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
 
   // On reset: show full bottle for REFILL_DURATION before starting countdown
   useEffect(() => {
-    clearInterval(intervalRef.current)
+    cancelAnimationFrame(rafRef.current)
     startTimeRef.current = null
     setTimeRemaining(timeLimit)
+    setTimePct(100)
     setRefilling(true)
     expiredRef.current = false
 
@@ -36,34 +42,40 @@ export function useTimer({ timeLimit, resetKey, onExpire, active }) {
     return () => clearTimeout(refillTimer)
   }, [resetKey, timeLimit])
 
-  // Run countdown only after refill phase is complete.
-  // Uses wall-clock time so backgrounded tabs don't cause rapid catch-up ticks.
+  // Run countdown via requestAnimationFrame after refill phase is complete.
+  // Uses wall-clock time so backgrounded tabs snap to the correct position.
   useEffect(() => {
     if (!active || !timeLimit || refilling) return
 
     startTimeRef.current = Date.now()
 
-    const tick = () => {
-      const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000)
-      const remaining = Math.max(0, timeLimit - elapsed)
+    const frame = () => {
+      const elapsedMs = Date.now() - startTimeRef.current
+      const elapsedSec = elapsedMs / 1000
+      const remaining = Math.max(0, timeLimit - elapsedSec)
+      const pct = (remaining / timeLimit) * 100
 
-      setTimeRemaining(remaining)
+      // Update the integer display (only when the whole second changes)
+      setTimeRemaining(Math.ceil(remaining))
+      setTimePct(pct)
 
       if (remaining <= 0) {
-        clearInterval(intervalRef.current)
         if (!expiredRef.current) {
           expiredRef.current = true
           onExpireRef.current()
         }
+        return // stop the loop
       }
+
+      rafRef.current = requestAnimationFrame(frame)
     }
 
-    intervalRef.current = setInterval(tick, 1000)
+    rafRef.current = requestAnimationFrame(frame)
 
-    return () => clearInterval(intervalRef.current)
+    return () => cancelAnimationFrame(rafRef.current)
   }, [active, timeLimit, resetKey, refilling])
 
   const getTimeRemaining = useCallback(() => timeRemaining, [timeRemaining])
 
-  return { timeRemaining, refilling, getTimeRemaining }
+  return { timeRemaining, timePct, refilling, getTimeRemaining }
 }

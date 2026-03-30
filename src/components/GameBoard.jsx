@@ -53,14 +53,13 @@ export default function GameBoard({
     }, 1000)
   }, [onSubmit])
 
-  const { timeRemaining, refilling } = useTimer({
+  const { timeRemaining, timePct, refilling } = useTimer({
     timeLimit,
     resetKey: attemptNumber,
     onExpire: handleTimerExpire,
     active: true,
   })
 
-  const timePct = timeLimit ? (timeRemaining / timeLimit) * 100 : 100
   const timerDanger = timeLimit && timeRemaining <= Math.ceil(timeLimit * 0.25)
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
