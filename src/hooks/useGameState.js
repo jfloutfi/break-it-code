@@ -40,6 +40,17 @@ function gameReducer(state, action) {
 
     case 'UPDATE_SETTINGS': {
       const settings = { ...state.settings, ...action.payload }
+      // When duplicates are off, slots can't exceed colors.
+      // Auto-adjust the other value to keep settings valid.
+      if (!settings.duplicates && settings.slots > settings.colors) {
+        // If the player just changed slots, bump colors up to match
+        if ('slots' in action.payload) {
+          settings.colors = settings.slots
+        } else {
+          // Otherwise (changed colors or toggled duplicates off), lower slots
+          settings.slots = settings.colors
+        }
+      }
       return { ...state, settings }
     }
 

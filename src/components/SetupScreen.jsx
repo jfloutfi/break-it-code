@@ -29,16 +29,21 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
         <div className="setup__row">
           <label className="setup__label">SLOTS</label>
           <div className="setup__options">
-            {[3, 4, 5, 6].map((n) => (
-              <button
-                key={n}
-                className={`setup__opt-btn ${settings.slots === n ? 'setup__opt-btn--active' : ''}`}
-                onClick={() => onUpdate({ slots: n })}
-                aria-label={`${n} slots`}
-              >
-                {n}
-              </button>
-            ))}
+            {[3, 4, 5, 6].map((n) => {
+              // Without duplicates, slots can't exceed available colors
+              const disabled = !settings.duplicates && n > settings.colors
+              return (
+                <button
+                  key={n}
+                  className={`setup__opt-btn ${settings.slots === n ? 'setup__opt-btn--active' : ''}`}
+                  onClick={() => onUpdate({ slots: n })}
+                  disabled={disabled}
+                  aria-label={`${n} slots`}
+                >
+                  {n}
+                </button>
+              )
+            })}
           </div>
           <p className="setup__tip">More slots = harder code to crack</p>
         </div>
@@ -47,16 +52,21 @@ export default function SetupScreen({ settings, onUpdate, onStart }) {
         <div className="setup__row">
           <label className="setup__label">COLORS</label>
           <div className="setup__options">
-            {[4, 5, 6, 7, 8].map((n) => (
-              <button
-                key={n}
-                className={`setup__opt-btn ${settings.colors === n ? 'setup__opt-btn--active' : ''}`}
-                onClick={() => onUpdate({ colors: n })}
-                aria-label={`${n} colors`}
-              >
-                {n}
-              </button>
-            ))}
+            {[4, 5, 6, 7, 8].map((n) => {
+              // Without duplicates, colors can't be fewer than slots
+              const disabled = !settings.duplicates && n < settings.slots
+              return (
+                <button
+                  key={n}
+                  className={`setup__opt-btn ${settings.colors === n ? 'setup__opt-btn--active' : ''}`}
+                  onClick={() => onUpdate({ colors: n })}
+                  disabled={disabled}
+                  aria-label={`${n} colors`}
+                >
+                  {n}
+                </button>
+              )
+            })}
           </div>
           <p className="setup__tip">More colors = more possible combinations</p>
         </div>
