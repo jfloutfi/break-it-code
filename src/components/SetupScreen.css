@@ -107,7 +107,13 @@
   min-width: 90px;
 }
 
-.setup__opt-btn:hover {
+.setup__opt-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.setup__opt-btn:hover:not(:disabled) {
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
   text-shadow: 0 0 6px var(--accent-cyan);
